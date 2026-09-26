@@ -1,117 +1,147 @@
-# OSK APPS
+<div align="center">
 
-**La navaja suiza de herramientas online** — PDF, imágenes, facturas, QR, acortador de links, calculadoras y más. Todo gratis, en un solo hub y sin registro.
+# 🧰 OSK APPS
 
-> Inspirado en 123apps.com, smallpdf.com e ilovepdf.com, con módulos SaaS adicionales.
+**La navaja suiza de herramientas online: PDF, imágenes, facturas, QR, acortador de links, calculadoras y más.**
+
+Gratis, rápido, sin registro y 100 % en español.
+
+![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=nextdotjs)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white)
+![Licencia](https://img.shields.io/badge/Licencia-MIT-green)
+
+</div>
 
 ---
 
-## Stack técnico
+## ✨ Características
 
-| Capa | Tecnología |
-|---|---|
-| Framework | Next.js 16 (App Router) + TypeScript 5 |
-| Estilos | Tailwind CSS 4 + shadcn/ui (New York) + lucide-react |
-| Estado | Zustand (navegación SPA) |
-| Backend | Next.js API Routes (Node runtime) |
-| Base de datos | Prisma ORM + SQLite (migrable a PostgreSQL cambiando el `datasource`) |
-| Procesamiento | sharp (imágenes), pdf-lib + JSZip (PDF), jsPDF (facturas) |
-| Cliente | qrcode, crypto-js, date-fns |
-| SEO | Metadata API, sitemap dinámico, robots.txt, JSON-LD (WebSite, WebApplication, FAQPage) |
+- **Catálogo de 53 herramientas en 7 categorías**, visible completo desde el día 1: las herramientas aún no desarrolladas se muestran con un badge «Próximamente».
+- **Herramientas stateless (privacidad por diseño):** los archivos que subes (PDF, imágenes, etc.) se procesan **en memoria** y se devuelven directamente al navegador. **Nunca se guardan en disco ni en la base de datos.** Límite de **20 MB por archivo**.
+- **Módulos con estado:**
+  - **Generador de facturas** — facturas profesionales con cálculo automático de impuestos y descuentos, plantillas reutilizables y **exportación a PDF**.
+  - **Acortador de links** — URLs cortas con **analytics de clics**: gráfico de los últimos 14 días, referrers, dispositivos, navegadores y sistema operativo, persistidos en base de datos.
+- **Dark / light mode** con detección automática del tema del sistema (`next-themes`).
+- **Buscador integrado** por nombre, descripción y palabras clave.
+- **Diseño responsive** mobile-first.
+- **Widget flotante de donación PayPal** integrado en toda la app.
 
-## Arquitectura
+## 🧰 Catálogo de herramientas
 
-Aplicación de página única (SPA) con navegación por hash (`#/tool/<id>`) — el catálogo completo vive en `/`. Cada herramienta es un módulo independiente cargado perezosamente (code-splitting por chunk).
+El catálogo completo está definido en un único registro (`src/lib/tools-registry.ts`), de donde se alimentan la interfaz, el buscador y el sitemap.
 
-```
-src/
-├── app/
-│   ├── page.tsx              → SPA: landing + vista de herramienta (hash-routing)
-│   ├── layout.tsx            → metadata global (OG/Twitter/canonical), ThemeProvider
-│   ├── sitemap.ts            → sitemap dinámico desde el registro de herramientas
-│   ├── robots.ts             → robots.txt (allow all + sitemap)
-│   └── api/
-│       ├── tools/            → compress-image · convert-image · merge-pdf · split-pdf
-│       └── links/ · s/       → acortador: CRUD + redirect con tracking
-├── components/
-│   ├── shared/               → ToolShell, FileDropzone, DownloadButton, CopyButton,
-│   │                           ThemeToggle, DonateWidget (PayPal), ToolSeoContent
-│   ├── home/                 → header, hero+buscador, catálogo, footer, vista de tool
-│   └── tools/                → 14 herramientas (1 componente = 1 chunk)
-└── lib/
-    ├── tools-registry.ts     → catálogo completo (53 tools, 7 categorías)
-    ├── seo-content.ts        → párrafo + FAQ por herramienta (JSON-LD FAQPage)
-    ├── processors/           → image.ts (sharp) · pdf.ts (pdf-lib/JSZip)
-    ├── store.ts · upload-client.ts · db.ts · utils.ts
-```
+| Categoría | Listas | Total |
+| --- | :---: | :---: |
+| PDF | 2 | 16 |
+| Imágenes | 2 | 9 |
+| Video y Audio | 0 | 7 |
+| Texto y Documentos | 2 | 6 |
+| Utilidades y Dev | 6 | 7 |
+| Calculadoras y Conversores | 2 | 4 |
+| Inteligencia Artificial | 0 | 4 |
+| **Total** | **14** | **53** |
 
-**Privacidad:** los archivos de usuario se procesan **en memoria** (Buffer) y nunca se persisten. Límite de 20 MB por archivo con mensajes de error claros.
+### Herramientas disponibles (14)
 
-## Fase 1 — MVP (✅ COMPLETADA)
+| Herramienta | Categoría | Ruta |
+| --- | --- | --- |
+| Combinar PDF | PDF | `/tools/pdf/unir-pdf` |
+| Dividir PDF | PDF | `/tools/pdf/dividir-pdf` |
+| Comprimir imagen | Imágenes | `/tools/imagen/comprimir-imagen` |
+| Convertir imagen | Imágenes | `/tools/imagen/convertir-imagen` |
+| Generador de facturas | Texto y Documentos | `/tools/texto/generador-facturas` |
+| Contador de palabras | Texto y Documentos | `/tools/texto/contador-palabras` |
+| Acortador de links | Utilidades y Dev | `/tools/dev/acortador-links` |
+| Generador de QR | Utilidades y Dev | `/tools/dev/generador-qr` |
+| Generador de contraseñas | Utilidades y Dev | `/tools/dev/generador-contrasenas` |
+| Formateador JSON | Utilidades y Dev | `/tools/dev/formateador-json` |
+| Convertidor Base64 | Utilidades y Dev | `/tools/dev/convertidor-base64` |
+| Generador de hash | Utilidades y Dev | `/tools/dev/generador-hash` |
+| Conversor de unidades | Calculadoras y Conversores | `/tools/calculadoras/conversor-unidades` |
+| Calculadora de fechas | Calculadoras y Conversores | `/tools/calculadoras/calculadora-fechas` |
 
-Landing con catálogo completo (53 herramientas visuales, las no implementadas marcadas "Próximamente"), buscador instantáneo, dark mode, donaciones PayPal y **14 herramientas funcionales**:
+Los slugs en español de cada URL se definen en el campo `slug` de `src/lib/tools-registry.ts`.
 
-**PDF** — Combinar PDF · Dividir PDF (rangos o ZIP por página)
-**Imágenes** — Comprimir imagen (calidad ajustable) · Convertir imagen (PNG/JPG/WebP)
-**Texto y Documentos** — Generador de facturas (impuestos, descuentos, PDF, plantillas localStorage) · Contador de palabras
-**Utilidades y Dev** — Acortador de links con analytics (clics, dispositivos, referrers, navegadores) · Generador de QR personalizable · Generador/validador de contraseñas · Formateador JSON · Convertidor Base64 · Generador de hash (MD5/SHA-1/SHA-256/SHA-512)
-**Calculadoras** — Conversor de unidades (8 categorías) · Calculadora de fechas (diferencias, días hábiles, sumar/restar)
+## 🚀 Puesta en marcha local
 
-## Fase 2 — Expansión PDF, imagen y texto (Roadmap)
-
-- [ ] Comprimir PDF · Rotar/eliminar páginas · Numerar páginas · Marca de agua
-- [ ] PDF ↔ Word/Excel/PowerPoint · PDF a JPG y JPG a PDF
-- [ ] Proteger/desbloquear PDF con contraseña · Firmar PDF
-- [ ] Redimensionar, recortar y rotar imagen · Marca de agua en imagen · Collage
-- [ ] Corrector ortográfico · Generador de contratos simples
-- [ ] Convertidor Markdown ↔ PDF/Word · Comparador de texto (diff)
-
-## Fase 3 — Video/audio + IA (Roadmap)
-
-- [ ] Convertir/comprimir video · Extraer audio (MP4→MP3) · Cortar y unir videos · Video a GIF
-- [ ] Convertir audio (MP3, WAV, OGG)
-- [ ] Quitar fondo con IA · Upscale con IA · OCR de PDF escaneado
-- [ ] Resumidor de texto/PDF con IA · Traductor de documentos con IA
-- [ ] Generador de descripciones de producto con IA · Generador de CV con editor visual
-- [ ] Calculadora de IVA/impuestos · Conversor de divisas
-
-## Fase 4 — Productos complejos (Roadmap a futuro)
-
-- [ ] Chatbot embebible con IA para negocios (configuración por negocio)
-- [ ] Programador de posts para redes sociales (OAuth Meta/X)
-- [ ] Habit tracker / Pomodoro con estadísticas
-
-## SEO
-
-- `sitemap.xml` **dinámico**: generado desde `tools-registry.ts` — cada herramienta `available` se indexa sola.
-- `robots.txt` dinámico con referencia al sitemap.
-- Metadata por herramienta (title "… gratis online | OSK APPS" + description) aplicada al abrir cada vista.
-- Datos estructurados: `WebSite`, `WebApplication` (landing) y `FAQPage` (cada herramienta, con bloque de texto + FAQ visible bajo la UI).
-- Open Graph y Twitter Card completos; `metadataBase` configurable.
-
-### Variables de entorno
-
-| Variable | Descripción |
-|---|---|
-| `DATABASE_URL` | URL de SQLite (`file:./db/custom.db` por defecto). En producción: apuntar a Postgres al migrar. |
-| `NEXT_PUBLIC_SITE_URL` | URL pública del sitio (ej. `https://osk-apps.vercel.app`). Sin ella, el sitemap usa ese valor por defecto. |
-
-## Desarrollo
+**Requisitos:** Node.js 20+ o [Bun](https://bun.sh).
 
 ```bash
-bun install
-bun run db:push     # aplica el schema Prisma
-bun run dev         # http://localhost:3000
-bun run lint        # ESLint
+# 1. Clonar el repositorio
+git clone https://github.com/<tu-usuario>/osk-apps.git
+cd osk-apps
+
+# 2. Instalar dependencias
+bun install        # o: npm install
+
+# 3. Crear la base de datos SQLite
+bun run db:push    # crea/regenera db/custom.db desde prisma/schema.prisma
+                   # (requiere DATABASE_URL en .env, p. ej. "file:./db/custom.db")
+
+# 4. Arrancar el servidor de desarrollo
+bun run dev        # → http://localhost:3000
 ```
 
-## Deploy en Vercel
+Otros scripts útiles:
 
-1. Push del repositorio y conéctalo en Vercel.
-2. Configura `NEXT_PUBLIC_SITE_URL` con la URL del subdominio de Vercel.
-3. Base de datos: para el acortador usa un proveedor Postgres gestionado (Railway/Supabase/Neon) y cambia `provider = "postgresql"` en `prisma/schema.prisma`; en desarrollo local basta SQLite.
-4. Deploy — el resto (sitemap, robots, metadata) se genera automáticamente.
+| Script | Descripción |
+| --- | --- |
+| `bun run lint` | ESLint sobre todo el proyecto |
+| `bun run build` | Build de producción (output standalone) |
+| `bun run db:generate` | Regenera el cliente Prisma |
+| `bun run db:migrate` / `bun run db:reset` | Migraciones / reinicio de la base |
 
----
+## 🔍 SEO implementado
 
-© OSK APPS — Hecho con herramientas propias. Si te sirve el proyecto, considera [donar](https://www.paypal.com/donate) para mantenerlo gratis.
+- **Rutas reales y descriptivas en español por herramienta** (`/tools/pdf/unir-pdf`, `/tools/imagen/comprimir-imagen`, …), con slugs gestionados desde el registro de herramientas.
+- **Metadata por página** con `generateMetadata`: título con el patrón **«[Nombre] gratis online | OSK APPS»**, descripción, canonical y **Open Graph / Twitter Card**.
+- **`sitemap.xml` dinámico** (`src/app/sitemap.ts`): se genera desde el registro de herramientas, **sin URLs hardcodeadas** — toda herramienta marcada como disponible se indexa automáticamente.
+- **`robots.txt`** generado desde `src/app/robots.ts` (rastreo permitido + referencia al sitemap).
+- **Contenido textual + preguntas frecuentes (FAQ)** bajo cada herramienta (`src/lib/seo-content.ts`), con **datos estructurados JSON-LD de tipo `FAQPage`** para resultados enriquecidos en Google.
+- Variable de entorno **opcional** `NEXT_PUBLIC_SITE_URL` (p. ej. `https://osk-apps.vercel.app`) para construir las **URLs absolutas** del sitemap, robots y canonicals.
+
+## 🗄️ Base de datos
+
+- **Prisma ORM + SQLite** por defecto: esquema en `prisma/schema.prisma` y archivo de base en **`db/custom.db`** (configurado vía `DATABASE_URL` en `.env`).
+- Modelos:
+  - **`ShortLink`** — links acortados (`slug` único, `url`, `title` opcional, `createdAt`).
+  - **`Click`** — un registro por clic con `referrer`, `device`, `browser`, `os` y `createdAt`; índice compuesto `(linkId, createdAt)` y borrado en cascada junto al link.
+- 🔒 **Los archivos subidos a las herramientas NUNCA se guardan** ni en disco ni en la base de datos: solo se persisten los links acortados y sus clics.
+
+## ▲ Deploy en Vercel
+
+1. Haz **push del repositorio a GitHub**.
+2. **Importa el repo en Vercel** (*Add New → Project*); el framework **Next.js se detecta automáticamente**.
+3. Configura la variable de entorno **`NEXT_PUBLIC_SITE_URL`** con el dominio asignado (p. ej. `https://osk-apps.vercel.app`).
+4. **Deploy.** 🎉
+
+> ⚠️ **Importante en producción:** el filesystem de las funciones serverless es efímero, por lo que **SQLite solo sirve para desarrollo local**. En producción conviene usar **PostgreSQL**.
+
+**Migración SQLite → PostgreSQL:**
+
+1. Cambia el datasource en `prisma/schema.prisma`:
+
+   ```prisma
+   datasource db {
+     provider = "postgresql"
+     url      = env("DATABASE_URL")
+   }
+   ```
+
+2. Apunta `DATABASE_URL` a una base **Postgres gestionada** (Neon, Supabase, Railway…).
+3. Ejecuta `npx prisma db push` para crear las tablas en la nueva base.
+4. Si usas **driver adapters**, agrega el driver de Postgres (`@prisma/adapter-pg`) y configúralo en la instanciación del cliente Prisma.
+
+## 🗺️ Roadmap
+
+- **Fase 2 — Ampliar catálogo:** conversiones PDF↔Office, PDF a JPG, JPG a PDF, herramientas de video/audio con `ffmpeg.wasm`, redimensionar y recortar imagen, corrector ortográfico y comparador de texto.
+- **Fase 3 — Cuentas de usuario:** autenticación con **NextAuth**, historial y guardado de documentos, facturas guardadas por usuario, generador de CV con estado y más módulos con estado.
+- **Fase 4 — Monetización y escala:** plan premium, API pública, cuentas para equipos/empresas, **PWA** con soporte offline e internacionalización (**i18n**).
+
+## 🤝 Donaciones
+
+El proyecto es y será gratuito. La app integra un **widget flotante de donación PayPal** (disponible desde el header, el footer y el botón flotante) para quien quiera apoyar el mantenimiento y el desarrollo de nuevas herramientas. 💚
+
+## 📄 Licencia
+
+Distribuido bajo la licencia **MIT**. Libre para usar, estudiar, modificar y compartir.

@@ -1,18 +1,23 @@
 "use client";
 
+import Link from "next/link";
 import { Search, Sparkles, Zap } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { useAppStore } from "@/lib/store";
-import { AVAILABLE_TOOLS, COMING_SOON_COUNT, TOOLS } from "@/lib/tools-registry";
+import {
+  AVAILABLE_TOOLS,
+  COMING_SOON_COUNT,
+  TOOLS,
+  getToolUrl,
+} from "@/lib/tools-registry";
 
 const QUICK_PICKS = ["merge-pdf", "compress-image", "qr-generator", "invoice-generator", "link-shortener"];
 
 export function Hero() {
   const searchQuery = useAppStore((s) => s.searchQuery);
   const setSearchQuery = useAppStore((s) => s.setSearchQuery);
-  const openTool = useAppStore((s) => s.openTool);
 
   const quickTools = QUICK_PICKS.map((id) => TOOLS.find((t) => t.id === id)!).filter(Boolean);
 
@@ -63,14 +68,13 @@ export function Hero() {
             <Zap className="size-3.5" aria-hidden /> Populares:
           </span>
           {quickTools.map((tool) => (
-            <button
+            <Link
               key={tool.id}
-              type="button"
-              onClick={() => openTool(tool.id)}
+              href={getToolUrl(tool)}
               className="rounded-full border bg-background px-3 py-1 text-xs font-medium text-muted-foreground shadow-sm transition-all hover:border-primary/40 hover:text-foreground"
             >
               {tool.name}
-            </button>
+            </Link>
           ))}
         </div>
       </div>

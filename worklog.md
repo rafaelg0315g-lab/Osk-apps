@@ -153,3 +153,41 @@ Work Log:
 Stage Summary:
 - Fase 1 al 100%: 14 herramientas funcionales + acortador con DB + donaciones PayPal + SEO pre-deploy completo.
 - Limitación conocida documentada: URLs de herramientas son fragmentos hash (#/tool/<id>) por arquitectura SPA del sandbox; migración a rutas reales /tools/... propuesta para post-deploy.
+---
+Task ID: 3-c
+Agent: general-purpose
+Task: Redactar README.md completo en español
+
+Work Log:
+- Leí worklog.md para contexto y luego package.json (scripts dev/build/lint/db:push/db:generate/db:migrate/db:reset), prisma/schema.prisma (modelos ShortLink y Click con onDelete Cascade e @@index), src/lib/tools-registry.ts completo (53 tools, 14 available, 7 categorías, campo slug + getToolUrl → /tools/<categoría>/<slug>), seo-content.ts (50 líneas, estructura intro+FAQ para JSON-LD FAQPage), src/app/sitemap.ts, robots.ts y layout.tsx (NEXT_PUBLIC_SITE_URL con fallback osk-apps.vercel.app, metadataBase, canonical, OG/Twitter, lang es).
+- Verifiqué que src/app/tools/[category]/[tool]/page.tsx NO existe todavía (glob en src/app); el sitemap.ts actual aún genera URLs #/tool/<id> y tools-registry.ts aparece modificado en git (migración de rutas en curso por agente paralelo). Documenté el README según la especificación de rutas /tools/<categoría>/<slug> (formato pedido explícitamente y soportado por el registro), dejando la discrepancia como advertencia.
+- Confirmé db/custom.db (DATABASE_URL en .env) y que no existe archivo LICENSE (la sección de licencia MIT es declarativa).
+- Conté herramientas disponibles por categoría desde el registro para la tabla de conteo: pdf 2/16, imagen 2/9, video 0/7, texto 2/6, dev 6/7, calculadoras 2/4, ia 0/4 = 14/53.
+- Escribí /home/z/my-project/README.md en español con: encabezado + tagline + badges shields.io (Next.js 16, TypeScript 5, MIT); ✨ Características (stateless en memoria 20MB, módulos con estado: facturas con PDF y acortador con analytics, dark/light, buscador, responsive, widget PayPal); 🧰 Catálogo (tabla 7 categorías X/Y, badge "Próximamente", tabla de las 14 tools con ruta /tools/<categoría>/<slug>); 🚀 Puesta en marcha (Node 20+/Bun, clone, bun install, bun run db:push → db/custom.db, bun run dev → :3000, tabla de scripts extra); 🔍 SEO (rutas en español, generateMetadata "[Nombre] gratis online | OSK APPS", OG, sitemap dinámico sin URLs hardcodeadas, robots.txt, FAQ JSON-LD, NEXT_PUBLIC_SITE_URL); 🗄️ Base de datos (Prisma+SQLite db/custom.db, modelos, privacidad de archivos); ▲ Deploy Vercel (4 pasos + aviso serverless + migración SQLite→Postgres con snippet prisma, Neon/Supabase/Railway, npx prisma db push, @prisma/adapter-pg si aplica); 🗺️ Roadmap Fases 2/3/4; 🤝 Donaciones; 📄 Licencia MIT.
+- No toqué ningún archivo de src/, prisma/ ni configuración: solo README.md y worklog.md.
+
+Stage Summary:
+- README.md completo, profesional y en español (9 secciones H2 + encabezado con badges) con datos reales verificados del proyecto: 53/14/39 herramientas, conteos por categoría, las 14 URLs con slugs españoles del registro, scripts de bun, esquema Prisma y variables de entorno.
+- Advertencias heredadas al orquestador: (1) el README documenta rutas /tools/<categoría>/<slug> y generateMetadata según la spec de Fase 1, pero al momento de escribirlo src/app/tools/[category]/[tool]/page.tsx no existía y sitemap.ts aún apunta a #/tool/<id> — la tarea paralela de migración de rutas debe completarse (y actualizar sitemap.ts a getToolUrl) para que el README sea 100 % exacto; (2) no hay archivo LICENSE en el repo, solo la mención MIT en el README.
+
+
+---
+Task ID: 3-b
+Agent: orchestrator (Z.ai Code)
+Task: Implementar prompt SEO pre-deploy — migración a rutas reales en español + metadata por página + sitemap/robots + verificación E2E y push a GitHub
+
+Work Log:
+- Agregado campo `slug` en español a los 53 tools de tools-registry.ts + helpers getToolBySlug/getToolUrl
+- Creada ruta real src/app/tools/[category]/[tool]/page.tsx: generateStaticParams (53 páginas), dynamicParams=false, generateMetadata (title "[Nombre] gratis online | OSK APPS", description ~150 chars, canonical, OG locale es), JSON-LD SoftwareApplication, breadcrumb
+- Creado ComingSoonView: páginas reales para las 39 herramientas "próximamente" con contenido textual + links internos
+- Creado LegacyHashRedirect: compatibilidad #/tool/<id> → /tools/<categoría>/<slug>
+- Migrada navegación a Links reales: tool-card, hero (populares), site-header (/#catalogo)
+- Refactor: header/footer/donate-widget movidos a layout.tsx (comunes a todas las páginas); store.ts simplificado (solo searchQuery + donateOpen); ToolView simplificado (metadata ahora es server-side)
+- sitemap.ts: URLs reales /tools/<cat>/<slug> para TODAS las herramientas (54 URLs, prioridad 0.9/0.6)
+- robots.ts: Allow / + Disallow /api/ + sitemap
+- README.md por subagente (Task 3-c) + LICENSE MIT agregada
+- E2E con agent-browser: home, navegación card→/tools/pdf/unir-pdf, merge de 2 PDFs vía UI (POST 200, PDF válido), legacy redirect, página próximamente, widget PayPal, buscador, móvil 390px, footer sticky, 0 errores de consola
+
+Stage Summary:
+- SEO prompt 100% implementado: metadata por página ✓, contenido+FAQ sin tocar UI de tools ✓, sitemap dinámico completo (54 URLs) ✓, robots ✓, rutas descriptivas en español ✓
+- Push checkpoint (pre-SEO) y push final a github.com/rafaelg0315g-lab/Osk-apps rama main

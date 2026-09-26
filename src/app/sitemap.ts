@@ -1,11 +1,11 @@
 import type { MetadataRoute } from "next";
 
-import { AVAILABLE_TOOLS } from "@/lib/tools-registry";
+import { TOOLS, getToolUrl } from "@/lib/tools-registry";
 
 /**
  * Sitemap dinámico generado desde el registro de herramientas.
- * No hay URLs hardcodeadas: cualquier herramienta con status "available"
- * se incluye automáticamente al agregarse al catálogo.
+ * No hay URLs hardcodeadas: incluye la landing + TODAS las herramientas
+ * del catálogo (disponibles y "próximamente") con sus rutas reales.
  */
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://osk-apps.vercel.app";
 
@@ -19,11 +19,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "daily",
       priority: 1,
     },
-    ...AVAILABLE_TOOLS.map((tool) => ({
-      url: `${SITE_URL}/#/tool/${tool.id}`,
+    ...TOOLS.map((tool) => ({
+      url: `${SITE_URL}${getToolUrl(tool)}`,
       lastModified,
       changeFrequency: "weekly" as const,
-      priority: 0.8,
+      priority: tool.status === "available" ? 0.9 : 0.6,
     })),
   ];
 }

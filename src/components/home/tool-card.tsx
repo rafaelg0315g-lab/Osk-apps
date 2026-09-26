@@ -1,40 +1,31 @@
 "use client";
 
+import Link from "next/link";
 import { ArrowRight, Clock } from "lucide-react";
-import { toast } from "sonner";
 
 import { Badge } from "@/components/ui/badge";
-import { useAppStore } from "@/lib/store";
-import { getCategoryById, type ToolMeta } from "@/lib/tools-registry";
+import { getCategoryById, getToolUrl, type ToolMeta } from "@/lib/tools-registry";
 import { cn } from "@/lib/utils";
 
+/**
+ * Tarjeta del catálogo: enlace real a la página de la herramienta
+ * (/tools/<categoría>/<slug>), disponible o "próximamente".
+ */
 export function ToolCard({ tool, className }: { tool: ToolMeta; className?: string }) {
-  const openTool = useAppStore((s) => s.openTool);
   const category = getCategoryById(tool.category);
   const Icon = tool.icon;
   const available = tool.status === "available";
 
-  const handleClick = () => {
-    if (available) {
-      openTool(tool.id);
-    } else {
-      toast.info(`“${tool.name}” llegará pronto`, {
-        description: "Estamos construyendo esta herramienta. ¡Vuelve pronto!",
-      });
-    }
-  };
-
   return (
-    <button
-      type="button"
-      onClick={handleClick}
+    <Link
+      href={getToolUrl(tool)}
       aria-label={available ? `Abrir ${tool.name}` : `${tool.name} — próximamente`}
       className={cn(
         "group relative flex h-full flex-col items-start gap-3 rounded-xl border bg-card p-4 text-left shadow-sm transition-all sm:p-5",
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
         available
-          ? "cursor-pointer hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-md"
-          : "cursor-default opacity-75 hover:opacity-100",
+          ? "hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-md"
+          : "opacity-75 hover:opacity-100",
         className,
       )}
     >
@@ -66,6 +57,6 @@ export function ToolCard({ tool, className }: { tool: ToolMeta; className?: stri
           {tool.description}
         </p>
       </div>
-    </button>
+    </Link>
   );
 }

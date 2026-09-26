@@ -87,6 +87,8 @@ export interface ToolCategoryMeta {
 
 export interface ToolMeta {
   id: string;
+  /** Slug en español para la URL pública: /tools/<categoría>/<slug> */
+  slug: string;
   name: string;
   description: string;
   category: ToolCategoryId;
@@ -152,6 +154,7 @@ export const TOOLS: ToolMeta[] = [
   // ─── PDF ───────────────────────────────────────────────
   {
     id: "merge-pdf",
+    slug: "unir-pdf",
     name: "Combinar PDF",
     description: "Une varios PDF en un solo documento, en el orden que quieras.",
     category: "pdf",
@@ -161,6 +164,7 @@ export const TOOLS: ToolMeta[] = [
   },
   {
     id: "split-pdf",
+    slug: "dividir-pdf",
     name: "Dividir PDF",
     description: "Extrae un rango de páginas o separa todas las páginas en PDFs individuales.",
     category: "pdf",
@@ -170,6 +174,7 @@ export const TOOLS: ToolMeta[] = [
   },
   {
     id: "compress-pdf",
+    slug: "comprimir-pdf",
     name: "Comprimir PDF",
     description: "Reduce el peso de tus PDF manteniendo la mejor calidad posible.",
     category: "pdf",
@@ -179,6 +184,7 @@ export const TOOLS: ToolMeta[] = [
   },
   {
     id: "pdf-to-word",
+    slug: "pdf-a-word",
     name: "PDF a Word",
     description: "Convierte tus PDF a documentos Word (.docx) editables.",
     category: "pdf",
@@ -188,6 +194,7 @@ export const TOOLS: ToolMeta[] = [
   },
   {
     id: "pdf-to-excel",
+    slug: "pdf-a-excel",
     name: "PDF a Excel",
     description: "Extrae tablas de un PDF y conviértelas a hojas de cálculo.",
     category: "pdf",
@@ -197,6 +204,7 @@ export const TOOLS: ToolMeta[] = [
   },
   {
     id: "pdf-to-ppt",
+    slug: "pdf-a-powerpoint",
     name: "PDF a PowerPoint",
     description: "Transforma tus PDF en presentaciones PowerPoint editables.",
     category: "pdf",
@@ -206,6 +214,7 @@ export const TOOLS: ToolMeta[] = [
   },
   {
     id: "pdf-to-jpg",
+    slug: "pdf-a-jpg",
     name: "PDF a JPG",
     description: "Convierte cada página del PDF en una imagen JPG.",
     category: "pdf",
@@ -215,6 +224,7 @@ export const TOOLS: ToolMeta[] = [
   },
   {
     id: "jpg-to-pdf",
+    slug: "jpg-a-pdf",
     name: "JPG a PDF",
     description: "Convierte tus imágenes en un documento PDF.",
     category: "pdf",
@@ -224,6 +234,7 @@ export const TOOLS: ToolMeta[] = [
   },
   {
     id: "rotate-pdf",
+    slug: "rotar-pdf",
     name: "Rotar páginas PDF",
     description: "Gira las páginas de tu PDF en el ángulo que necesites.",
     category: "pdf",
@@ -233,6 +244,7 @@ export const TOOLS: ToolMeta[] = [
   },
   {
     id: "delete-pdf-pages",
+    slug: "eliminar-paginas-pdf",
     name: "Eliminar páginas PDF",
     description: "Borra las páginas que no necesitas de tu documento.",
     category: "pdf",
@@ -242,6 +254,7 @@ export const TOOLS: ToolMeta[] = [
   },
   {
     id: "protect-pdf",
+    slug: "proteger-pdf",
     name: "Proteger PDF",
     description: "Agrega contraseña a tus PDF para mayor seguridad.",
     category: "pdf",
@@ -251,6 +264,7 @@ export const TOOLS: ToolMeta[] = [
   },
   {
     id: "unlock-pdf",
+    slug: "desbloquear-pdf",
     name: "Desbloquear PDF",
     description: "Quita la contraseña de PDFs que te pertenecen.",
     category: "pdf",
@@ -260,6 +274,7 @@ export const TOOLS: ToolMeta[] = [
   },
   {
     id: "sign-pdf",
+    slug: "firmar-pdf",
     name: "Firmar PDF",
     description: "Agrega tu firma digital a documentos PDF.",
     category: "pdf",
@@ -269,6 +284,7 @@ export const TOOLS: ToolMeta[] = [
   },
   {
     id: "number-pdf-pages",
+    slug: "numerar-paginas-pdf",
     name: "Numerar páginas PDF",
     description: "Agrega números de página con la posición y formato que prefieras.",
     category: "pdf",
@@ -278,6 +294,7 @@ export const TOOLS: ToolMeta[] = [
   },
   {
     id: "watermark-pdf",
+    slug: "marca-de-agua-pdf",
     name: "Marca de agua PDF",
     description: "Agrega texto o marca de agua a tus documentos.",
     category: "pdf",
@@ -287,6 +304,7 @@ export const TOOLS: ToolMeta[] = [
   },
   {
     id: "ocr-pdf",
+    slug: "ocr-pdf",
     name: "OCR — PDF escaneado",
     description: "Extrae texto de PDFs escaneados con reconocimiento óptico.",
     category: "pdf",
@@ -298,6 +316,7 @@ export const TOOLS: ToolMeta[] = [
   // ─── Imágenes ──────────────────────────────────────────
   {
     id: "compress-image",
+    slug: "comprimir-imagen",
     name: "Comprimir imagen",
     description: "Reduce el peso de tus imágenes JPG, PNG y WebP con control de calidad.",
     category: "imagen",
@@ -307,6 +326,7 @@ export const TOOLS: ToolMeta[] = [
   },
   {
     id: "convert-image",
+    slug: "convertir-imagen",
     name: "Convertir imagen",
     description: "Cambia el formato de tus imágenes: PNG, JPG y WebP.",
     category: "imagen",
@@ -316,6 +336,7 @@ export const TOOLS: ToolMeta[] = [
   },
   {
     id: "resize-image",
+    slug: "redimensionar-imagen",
     name: "Redimensionar imagen",
     description: "Cambia el ancho y alto de tus imágenes manteniendo la proporción.",
     category: "imagen",
@@ -325,6 +346,7 @@ export const TOOLS: ToolMeta[] = [
   },
   {
     id: "crop-image",
+    slug: "recortar-imagen",
     name: "Recortar imagen",
     description: "Corta y ajusta tus imágenes al área exacta que necesitas.",
     category: "imagen",
@@ -334,6 +356,7 @@ export const TOOLS: ToolMeta[] = [
   },
   {
     id: "remove-bg",
+    slug: "quitar-fondo",
     name: "Quitar fondo (IA)",
     description: "Elimina el fondo de tus imágenes automáticamente con IA.",
     category: "imagen",
@@ -343,6 +366,7 @@ export const TOOLS: ToolMeta[] = [
   },
   {
     id: "watermark-image",
+    slug: "marca-de-agua-imagen",
     name: "Marca de agua en imagen",
     description: "Protege tus imágenes agregando texto o logotipos.",
     category: "imagen",
@@ -352,6 +376,7 @@ export const TOOLS: ToolMeta[] = [
   },
   {
     id: "collage",
+    slug: "generar-collage",
     name: "Generar collage",
     description: "Combina varias imágenes en un collage con distintas plantillas.",
     category: "imagen",
@@ -361,6 +386,7 @@ export const TOOLS: ToolMeta[] = [
   },
   {
     id: "upscale-image",
+    slug: "mejorar-resolucion-ia",
     name: "Upscale con IA",
     description: "Mejora la resolución de tus imágenes hasta 4x con IA.",
     category: "imagen",
@@ -370,6 +396,7 @@ export const TOOLS: ToolMeta[] = [
   },
   {
     id: "image-editor",
+    slug: "editor-imagen",
     name: "Editor básico de imagen",
     description: "Ajusta brillo, contraste, saturación y aplica filtros.",
     category: "imagen",
@@ -381,6 +408,7 @@ export const TOOLS: ToolMeta[] = [
   // ─── Video y Audio ─────────────────────────────────────
   {
     id: "convert-video",
+    slug: "convertir-video",
     name: "Convertir video",
     description: "Cambia el formato de tus videos: MP4, WebM, MOV y más.",
     category: "video",
@@ -390,6 +418,7 @@ export const TOOLS: ToolMeta[] = [
   },
   {
     id: "compress-video",
+    slug: "comprimir-video",
     name: "Comprimir video",
     description: "Reduce el tamaño de tus videos manteniendo la calidad.",
     category: "video",
@@ -399,6 +428,7 @@ export const TOOLS: ToolMeta[] = [
   },
   {
     id: "extract-audio",
+    slug: "extraer-audio",
     name: "Extraer audio de video",
     description: "Convierte MP4 a MP3: saca el audio de cualquier video.",
     category: "video",
@@ -408,6 +438,7 @@ export const TOOLS: ToolMeta[] = [
   },
   {
     id: "trim-video",
+    slug: "cortar-video",
     name: "Cortar video",
     description: "Recorta tus videos y quédate solo con el fragmento que quieres.",
     category: "video",
@@ -417,6 +448,7 @@ export const TOOLS: ToolMeta[] = [
   },
   {
     id: "convert-audio",
+    slug: "convertir-audio",
     name: "Convertir audio",
     description: "Convierte entre MP3, WAV, OGG, AAC y otros formatos.",
     category: "video",
@@ -426,6 +458,7 @@ export const TOOLS: ToolMeta[] = [
   },
   {
     id: "merge-videos",
+    slug: "unir-videos",
     name: "Unir videos",
     description: "Combina varios clips en un solo video continuo.",
     category: "video",
@@ -435,6 +468,7 @@ export const TOOLS: ToolMeta[] = [
   },
   {
     id: "video-to-gif",
+    slug: "video-a-gif",
     name: "Video a GIF",
     description: "Genera GIF animados desde fragmentos de tus videos.",
     category: "video",
@@ -446,6 +480,7 @@ export const TOOLS: ToolMeta[] = [
   // ─── Texto y Documentos ────────────────────────────────
   {
     id: "invoice-generator",
+    slug: "generador-facturas",
     name: "Generador de facturas",
     description: "Crea facturas profesionales con cálculo automático de impuestos y exporta a PDF.",
     category: "texto",
@@ -455,6 +490,7 @@ export const TOOLS: ToolMeta[] = [
   },
   {
     id: "word-counter",
+    slug: "contador-palabras",
     name: "Contador de palabras",
     description: "Cuenta palabras, caracteres, oraciones y tiempo de lectura en tiempo real.",
     category: "texto",
@@ -464,6 +500,7 @@ export const TOOLS: ToolMeta[] = [
   },
   {
     id: "spell-checker",
+    slug: "corrector-ortografico",
     name: "Corrector ortográfico",
     description: "Revisa y corrige la ortografía de tus textos en español.",
     category: "texto",
@@ -473,6 +510,7 @@ export const TOOLS: ToolMeta[] = [
   },
   {
     id: "contract-generator",
+    slug: "generador-contratos",
     name: "Generador de contratos",
     description: "Crea contratos simples con plantillas personalizables.",
     category: "texto",
@@ -482,6 +520,7 @@ export const TOOLS: ToolMeta[] = [
   },
   {
     id: "markdown-to-pdf",
+    slug: "markdown-a-pdf",
     name: "Markdown a PDF / Word",
     description: "Convierte tus documentos Markdown a PDF o Word con formato.",
     category: "texto",
@@ -491,6 +530,7 @@ export const TOOLS: ToolMeta[] = [
   },
   {
     id: "cv-builder",
+    slug: "generador-cv",
     name: "Generador de CV",
     description: "Crea tu currículum con plantillas profesionales y editor visual.",
     category: "texto",
@@ -502,6 +542,7 @@ export const TOOLS: ToolMeta[] = [
   // ─── Utilidades y Dev ──────────────────────────────────
   {
     id: "link-shortener",
+    slug: "acortador-links",
     name: "Acortador de links",
     description: "Acorta URLs y consulta analytics de clics, referrers y dispositivos.",
     category: "dev",
@@ -511,6 +552,7 @@ export const TOOLS: ToolMeta[] = [
   },
   {
     id: "qr-generator",
+    slug: "generador-qr",
     name: "Generador de QR",
     description: "Crea códigos QR personalizados con colores y descárgalos en PNG.",
     category: "dev",
@@ -520,6 +562,7 @@ export const TOOLS: ToolMeta[] = [
   },
   {
     id: "password-generator",
+    slug: "generador-contrasenas",
     name: "Generador de contraseñas",
     description: "Genera contraseñas seguras y evalúa la fortaleza de las tuyas.",
     category: "dev",
@@ -529,6 +572,7 @@ export const TOOLS: ToolMeta[] = [
   },
   {
     id: "json-formatter",
+    slug: "formateador-json",
     name: "Formateador JSON",
     description: "Formatea, valida y minifica JSON con detección de errores.",
     category: "dev",
@@ -538,6 +582,7 @@ export const TOOLS: ToolMeta[] = [
   },
   {
     id: "base64-converter",
+    slug: "convertidor-base64",
     name: "Convertidor Base64",
     description: "Codifica y decodifica texto en Base64 con soporte Unicode.",
     category: "dev",
@@ -547,6 +592,7 @@ export const TOOLS: ToolMeta[] = [
   },
   {
     id: "hash-generator",
+    slug: "generador-hash",
     name: "Generador de hash",
     description: "Calcula MD5, SHA-1, SHA-256 y SHA-512 de cualquier texto.",
     category: "dev",
@@ -556,6 +602,7 @@ export const TOOLS: ToolMeta[] = [
   },
   {
     id: "text-diff",
+    slug: "comparador-texto",
     name: "Comparador de texto",
     description: "Compara dos textos y visualiza las diferencias línea por línea.",
     category: "dev",
@@ -567,6 +614,7 @@ export const TOOLS: ToolMeta[] = [
   // ─── Calculadoras y Conversores ────────────────────────
   {
     id: "unit-converter",
+    slug: "conversor-unidades",
     name: "Conversor de unidades",
     description: "Convierte longitud, masa, temperatura, volumen, datos y más.",
     category: "calculadoras",
@@ -576,6 +624,7 @@ export const TOOLS: ToolMeta[] = [
   },
   {
     id: "date-calculator",
+    slug: "calculadora-fechas",
     name: "Calculadora de fechas",
     description: "Calcula diferencias entre fechas y suma o resta días, meses y años.",
     category: "calculadoras",
@@ -585,6 +634,7 @@ export const TOOLS: ToolMeta[] = [
   },
   {
     id: "vat-calculator",
+    slug: "calculadora-iva",
     name: "Calculadora de IVA",
     description: "Calcula IVA, impuestos y totales con las tasas de tu país.",
     category: "calculadoras",
@@ -594,6 +644,7 @@ export const TOOLS: ToolMeta[] = [
   },
   {
     id: "currency-converter",
+    slug: "conversor-divisas",
     name: "Conversor de divisas",
     description: "Convierte entre monedas con tasas de cambio actualizadas.",
     category: "calculadoras",
@@ -605,6 +656,7 @@ export const TOOLS: ToolMeta[] = [
   // ─── Inteligencia Artificial ───────────────────────────
   {
     id: "ai-summarizer",
+    slug: "resumidor-ia",
     name: "Resumidor con IA",
     description: "Resume textos y PDF largos en segundos con IA.",
     category: "ia",
@@ -614,6 +666,7 @@ export const TOOLS: ToolMeta[] = [
   },
   {
     id: "ai-translator",
+    slug: "traductor-documentos",
     name: "Traductor de documentos",
     description: "Traduce documentos completos manteniendo el formato.",
     category: "ia",
@@ -623,6 +676,7 @@ export const TOOLS: ToolMeta[] = [
   },
   {
     id: "faq-chatbot",
+    slug: "chatbot-faq",
     name: "Chatbot de FAQ para negocios",
     description: "Genera un chatbot de preguntas frecuentes entrenado con tu negocio.",
     category: "ia",
@@ -632,6 +686,7 @@ export const TOOLS: ToolMeta[] = [
   },
   {
     id: "product-description-gen",
+    slug: "generador-descripciones",
     name: "Generador de descripciones",
     description: "Crea descripciones de producto persuasivas con IA.",
     category: "ia",
@@ -646,6 +701,15 @@ export const TOOLS: ToolMeta[] = [
 
 export function getToolById(id: string): ToolMeta | undefined {
   return TOOLS.find((t) => t.id === id);
+}
+
+export function getToolBySlug(slug: string): ToolMeta | undefined {
+  return TOOLS.find((t) => t.slug === slug);
+}
+
+/** URL pública de una herramienta: /tools/<categoría>/<slug> */
+export function getToolUrl(tool: Pick<ToolMeta, "category" | "slug">): string {
+  return `/tools/${tool.category}/${tool.slug}`;
 }
 
 export function getCategoryById(id: ToolCategoryId): ToolCategoryMeta {

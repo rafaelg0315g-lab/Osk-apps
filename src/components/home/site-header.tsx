@@ -28,7 +28,7 @@ export function SiteHeader() {
 
         <nav className="flex items-center gap-1 sm:gap-2" aria-label="Navegación principal">
           <Button variant="ghost" size="sm" asChild className="hidden sm:inline-flex">
-            <a href="#catalogo">Herramientas</a>
+            <Link href="/#catalogo">Herramientas</Link>
           </Button>
           <Button
             variant="ghost"
@@ -42,7 +42,7 @@ export function SiteHeader() {
           </Button>
           <ThemeToggle />
           <Button size="sm" asChild>
-            <a href="#catalogo">Explorar</a>
+            <Link href="/#catalogo">Explorar</Link>
           </Button>
         </nav>
       </div>
