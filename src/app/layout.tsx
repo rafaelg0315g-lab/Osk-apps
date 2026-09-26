@@ -42,6 +42,10 @@ export const metadata: Metadata = {
     "gratis",
   ],
   authors: [{ name: "OSK APPS" }],
+  // Verificación de Google Search Console (token de googleebcb657f6294f8f2.html)
+  verification: {
+    google: "ebcb657f6294f8f2",
+  },
   alternates: {
     canonical: "/",
   },
