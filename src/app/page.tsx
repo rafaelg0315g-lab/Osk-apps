@@ -9,7 +9,28 @@ import { SiteHeader } from "@/components/home/site-header";
 import { ToolView } from "@/components/home/tool-view";
 import { DonateWidget } from "@/components/shared/donate-widget";
 import { useAppStore } from "@/lib/store";
-import { getToolById } from "@/lib/tools-registry";
+import { AVAILABLE_TOOLS, getToolById } from "@/lib/tools-registry";
+
+/** Datos estructurados de la landing para resultados enriquecidos en Google. */
+const WEBSITE_JSON_LD = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "OSK APPS",
+  alternateName: "OSK APPS — Herramientas online gratis",
+  description:
+    "La navaja suiza de herramientas online: PDF, imágenes, facturas, QR, acortador de links, calculadoras y más. Gratis, rápido y sin registro.",
+  inLanguage: "es",
+};
+
+const APP_JSON_LD = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  name: "OSK APPS",
+  applicationCategory: "UtilitiesApplication",
+  operatingSystem: "Web",
+  offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+  featureList: AVAILABLE_TOOLS.map((t) => t.name),
+};
 
 /**
  * OSK APPS — Aplicación de página única (SPA).
@@ -49,8 +70,12 @@ export default function Home() {
   // Al cambiar de herramienta mediante el store, refleja el hash
   useEffect(() => {
     const expected = activeToolId ? `#/tool/${activeToolId}` : "";
-    if (window.location.hash !== expected && (activeToolId || window.location.hash.startsWith("#/tool/"))) {
-      history.replaceState(null, "", expected ? `#${expected}` : window.location.pathname);
+    if (window.location.hash !== expected) {
+      history.replaceState(
+        null,
+        "",
+        expected || `${window.location.pathname}${window.location.search}`,
+      );
     }
     // Scroll al inicio al abrir/cerrar herramienta
     window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior });
@@ -58,6 +83,16 @@ export default function Home() {
 
   return (
     <div className="flex min-h-screen flex-col">
+      {/* Datos estructurados para buscadores */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(WEBSITE_JSON_LD) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(APP_JSON_LD) }}
+      />
+
       <SiteHeader />
       <main className="flex-1">
         {activeToolId ? <ToolView toolId={activeToolId} /> : (

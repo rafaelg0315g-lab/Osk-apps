@@ -91,7 +91,6 @@ export function DonateWidget() {
                   className="cursor-pointer transition-transform hover:scale-[1.03] active:scale-95"
                 />
                 {/* Pixel de tracking de PayPal */}
-                {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   alt=""
                   src="https://www.paypal.com/en_CO/i/scr/pixel.gif"

@@ -42,7 +42,7 @@ import {
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
-import { cn, formatDate } from "@/lib/utils";
+import { formatDate } from "@/lib/utils";
 
 type CurrencyCode = "COP" | "USD" | "EUR" | "MXN" | "PEN" | "ARS";
 
@@ -72,14 +72,19 @@ interface InvoiceConfig {
   notes: string;
 }
 
-interface InvoiceTemplate {
-  id: string;
-  name: string;
-  savedAt: string;
+/** Estado completo que se conserva dentro de una plantilla. */
+interface InvoiceTemplateData {
   emisor: InvoiceParty;
   cliente: InvoiceParty;
   config: InvoiceConfig;
   lines: InvoiceLine[];
+}
+
+/** Forma de almacenamiento en localStorage: { id, nombre, datos }. */
+interface InvoiceTemplate {
+  id: string;
+  nombre: string;
+  datos: InvoiceTemplateData;
 }
 
 interface Totals {
@@ -100,8 +105,6 @@ const CURRENCIES: { code: CurrencyCode; label: string }[] = [
   { code: "PEN", label: "Sol peruano (PEN)" },
   { code: "ARS", label: "Peso argentino (ARS)" },
 ];
-
-const TAX_OPTIONS = [0, 5, 12, 16, 19, 21];
 
 const EMPTY_PARTY: InvoiceParty = {
   name: "",
@@ -217,11 +220,9 @@ function isValidTemplate(value: unknown): value is InvoiceTemplate {
   const obj = value as Record<string, unknown>;
   return (
     typeof obj.id === "string" &&
-    typeof obj.name === "string" &&
-    Array.isArray(obj.lines) &&
-    typeof obj.emisor === "object" &&
-    typeof obj.cliente === "object" &&
-    typeof obj.config === "object"
+    typeof obj.nombre === "string" &&
+    obj.datos !== null &&
+    typeof obj.datos === "object"
   );
 }
 
@@ -325,12 +326,13 @@ export default function InvoiceGeneratorTool() {
   const [config, setConfig] = useState<InvoiceConfig>(defaultConfig);
   const [lines, setLines] = useState<InvoiceLine[]>(() => [defaultLine(0)]);
 
+  // Las plantillas se leen de localStorage al montar: el componente se carga con
+  // dynamic(ssr: false), por lo que el inicializador perezoso solo corre en cliente.
   const [templates, setTemplates] = useState<InvoiceTemplate[]>(readTemplates);
   const [selectedTemplateId, setSelectedTemplateId] = useState("");
   const [saveDialogOpen, setSaveDialogOpen] = useState(false);
   const [templateName, setTemplateName] = useState("");
 
-  // Carga inicial de plantillas desde localStorage (ver readTemplates)
   const moneyFormatter = useMemo(
     () => new Intl.NumberFormat("es", { style: "currency", currency: config.currency }),
     [config.currency],
@@ -402,16 +404,12 @@ export default function InvoiceGeneratorTool() {
       return;
     }
     const existing = templates.find(
-      (t) => t.name.trim().toLowerCase() === name.toLowerCase(),
+      (t) => t.nombre.trim().toLowerCase() === name.toLowerCase(),
     );
     const template: InvoiceTemplate = {
       id: existing ? existing.id : generateId(),
-      name,
-      savedAt: new Date().toISOString(),
-      emisor,
-      cliente,
-      config,
-      lines,
+      nombre: name,
+      datos: { emisor, cliente, config, lines },
     };
     const next = existing
       ? templates.map((t) => (t.id === existing.id ? template : t))
@@ -429,14 +427,16 @@ export default function InvoiceGeneratorTool() {
       toast.error("Selecciona una plantilla para cargar");
       return;
     }
-    setEmisor(normalizeParty(template.emisor));
-    setCliente(normalizeParty(template.cliente));
-    setConfig(normalizeConfig(template.config));
+    setEmisor(normalizeParty(template.datos.emisor));
+    setCliente(normalizeParty(template.datos.cliente));
+    setConfig(normalizeConfig(template.datos.config));
     setLines(
-      template.lines.length > 0 ? template.lines.map(normalizeLine) : [defaultLine(0)],
+      template.datos.lines.length > 0
+        ? template.datos.lines.map(normalizeLine)
+        : [defaultLine(0)],
     );
     setSelectedTemplateId("");
-    toast.success(`Plantilla "${template.name}" cargada`);
+    toast.success(`Plantilla "${template.nombre}" cargada`);
   };
 
   const deleteTemplate = () => {
@@ -447,23 +447,16 @@ export default function InvoiceGeneratorTool() {
     }
     persistTemplates(templates.filter((t) => t.id !== template.id));
     setSelectedTemplateId("");
-    toast.success(`Plantilla "${template.name}" eliminada`);
+    toast.success(`Plantilla "${template.nombre}" eliminada`);
   };
 
-  const resetInvoice = () => {
+  const newInvoice = () => {
     setEmisor({ ...EMPTY_PARTY });
     setCliente({ ...EMPTY_PARTY });
     setConfig(defaultConfig());
     setLines([defaultLine(0)]);
     setSelectedTemplateId("");
-    toast.success("Se creó una factura en blanco");
-  };
-
-  const newInvoice = () => {
-    toast("Se creará una factura en blanco. Los datos no guardados se perderán.", {
-      action: { label: "Confirmar", onClick: resetInvoice },
-      duration: 8000,
-    });
+    toast.success("Nueva factura creada en blanco");
   };
 
   const validateForPdf = (): string[] => {
@@ -518,7 +511,7 @@ export default function InvoiceGeneratorTool() {
               <SelectContent>
                 {templates.map((template) => (
                   <SelectItem key={template.id} value={template.id}>
-                    {template.name} ({formatDate(template.savedAt)})
+                    {template.nombre}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -621,23 +614,21 @@ export default function InvoiceGeneratorTool() {
             />
           </div>
           <div className="space-y-1.5">
-            <Label htmlFor="inv-tax">Impuesto global por línea</Label>
-            <Select
-              value={String(config.taxRate)}
-              onValueChange={(value) => handleGlobalTaxChange(Number(value))}
-            >
-              <SelectTrigger id="inv-tax" className="w-full">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {TAX_OPTIONS.map((rate) => (
-                  <SelectItem key={rate} value={String(rate)}>
-                    {formatPercent(rate)}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            <p className="text-xs text-muted-foreground">
+            <Label htmlFor="inv-tax">Impuesto global (%)</Label>
+            <Input
+              id="inv-tax"
+              type="number"
+              min={0}
+              max={100}
+              step="any"
+              inputMode="decimal"
+              value={config.taxRate}
+              onChange={(e) =>
+                handleGlobalTaxChange(clampNum(e.target.valueAsNumber, 0, 100, 0))
+              }
+              aria-describedby="inv-tax-hint"
+            />
+            <p id="inv-tax-hint" className="text-xs text-muted-foreground">
               Valor por defecto de las líneas nuevas; cada línea puede ajustarse.
             </p>
           </div>
@@ -832,7 +823,7 @@ export default function InvoiceGeneratorTool() {
           type="button"
           onClick={() => setSaveDialogOpen(true)}
           variant="outline"
-          className={cn("gap-2")}
+          className="gap-2"
         >
           <Save className="size-4" aria-hidden />
           Guardar plantilla
@@ -841,7 +832,7 @@ export default function InvoiceGeneratorTool() {
           type="button"
           variant="outline"
           onClick={newInvoice}
-          className={cn("gap-2", "text-rose-600 hover:text-rose-700")}
+          className="gap-2 text-rose-600 hover:text-rose-700"
         >
           <FilePlus2 className="size-4" aria-hidden />
           Nueva factura
@@ -980,7 +971,7 @@ function buildInvoicePdf(payload: PdfPayload): void {
   const tableStartY = Math.max(70, Math.max(emisorBottom, clienteBottom) + 10);
   autoTable(doc, {
     startY: tableStartY,
-    head: [["Descripción", "Cant.", "Precio unit.", "Impuesto", "Importe"]],
+    head: [["Descripción", "Cantidad", "Precio unit.", "Impuesto", "Importe"]],
     body: lines.map((line, index) => [
       line.description.trim(),
       String(numOr(line.quantity, 0)),

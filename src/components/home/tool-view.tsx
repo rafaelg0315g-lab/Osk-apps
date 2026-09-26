@@ -1,17 +1,42 @@
 "use client";
 
+import { useEffect } from "react";
 import { ArrowLeft } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { ToolSeoContent } from "@/components/shared/tool-seo-content";
 import { ToolComponent } from "@/components/tools/tool-components";
 import { useAppStore } from "@/lib/store";
 import { getCategoryById, getToolById } from "@/lib/tools-registry";
+import { TOOL_SEO } from "@/lib/seo-content";
 import { cn } from "@/lib/utils";
+
+const HOME_TITLE = "OSK APPS — Todas las herramientas online en un solo lugar";
+const HOME_DESCRIPTION =
+  "La navaja suiza de herramientas online: PDF, imágenes, facturas, QR, acortador de links, calculadoras y más. Gratis, rápido y sin registro.";
 
 /** Página completa de una herramienta: encabezado + contenido cargado perezosamente. */
 export function ToolView({ toolId }: { toolId: string }) {
   const goHome = useAppStore((s) => s.goHome);
   const tool = getToolById(toolId);
+
+  // Metadata dinámica de la "página" de la herramienta (SPA): title + description.
+  // Google renderiza JavaScript, por lo que estos valores son los que indexa.
+  useEffect(() => {
+    if (!tool) return;
+    const seo = TOOL_SEO[tool.id];
+    const description = seo?.intro.slice(0, 155) ?? tool.description;
+    const previousTitle = document.title;
+    const metaDescription = document.querySelector('meta[name="description"]');
+
+    document.title = `${tool.name} gratis online | OSK APPS`;
+    metaDescription?.setAttribute("content", description);
+
+    return () => {
+      document.title = previousTitle;
+      metaDescription?.setAttribute("content", HOME_DESCRIPTION);
+    };
+  }, [tool]);
 
   if (!tool) {
     return (
@@ -61,6 +86,9 @@ export function ToolView({ toolId }: { toolId: string }) {
       </div>
 
       <ToolComponent id={tool.id} />
+
+      {/* Bloque SEO: párrafo + FAQ (no interfiere con la UI funcional) */}
+      <ToolSeoContent toolId={tool.id} />
     </div>
   );
 }

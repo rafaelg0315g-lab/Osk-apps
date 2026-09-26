@@ -16,6 +16,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL ?? "https://osk-apps.vercel.app",
+  ),
   title: {
     default: "OSK APPS — Todas las herramientas online en un solo lugar",
     template: "%s | OSK APPS",
@@ -36,10 +39,14 @@ export const metadata: Metadata = {
     "gratis",
   ],
   authors: [{ name: "OSK APPS" }],
+  alternates: {
+    canonical: "/",
+  },
   openGraph: {
     title: "OSK APPS — Todas las herramientas online en un solo lugar",
     description:
       "PDF, imágenes, facturas, QR, links, calculadoras y más. Gratis, rápido y sin registro.",
+    url: "/",
     siteName: "OSK APPS",
     type: "website",
     locale: "es",
@@ -48,6 +55,10 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "OSK APPS",
     description: "La navaja suiza de herramientas online. Gratis y sin registro.",
+  },
+  robots: {
+    index: true,
+    follow: true,
   },
 };
 

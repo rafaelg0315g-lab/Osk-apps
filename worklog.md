@@ -113,3 +113,43 @@ Work Log:
 Stage Summary:
 - 4 herramientas de archivo completas (frontend + API), cumpliendo el contrato de APIs fijado: binario con X-Original-Size/X-Result-Size y errores 4xx JSON en español. Procesamiento 100% en memoria con sharp/pdf-lib/jszip, sin paquetes nuevos y sin tocar page.tsx, registro ni componentes compartidos.
 - Decisiones: entrada de imágenes ampliada a gif/tiff/avif (sharp los lee; en compress "keep" cae a jpeg según contrato); JPEG siempre con flatten blanco para evitar fondos negros con alfa; extras de cabecera X-File-Count/X-Page-Count usados por la UI (aditivos, no rompen el contrato). Riesgo menor: PNG sobre comprimido puede pesar igual o más que el original (sin pérdida); la UI lo comunica honestamente con badge ámbar.
+---
+Task ID: 2-c
+Agent: full-stack-developer
+Task: Conversor de unidades, calculadora de fechas y generador de facturas con PDF
+
+Work Log:
+- Leí worklog.md y los componentes compartidos (ToolShell, CopyButton, formatDate) antes de empezar. Hallazgo clave: los intentos anteriores cancelados SÍ dejaron implementaciones completas en los 3 archivos (no stubs), así que en vez de reescribir desde cero se auditó línea por línea contra la especificación y se corrigieron las desviaciones (más rápido y sin riesgo).
+- unit-converter.tsx (verificado, sin cambios): Tabs de 8 categorías (Longitud, Masa, Temperatura, Volumen, Área, Velocidad, Almacenamiento, Tiempo) con factores a base; temperatura con conversión afín real C/F/K (toCelsius/fromCelsius); input numérico default 1, Select "De"/"A" con etiquetas "Kilómetro (km)", botón swap ArrowUpDown, resultado en card grande con formato inteligente (hasta 6 decimales, coma decimal es-ES, exponencial solo en extremos), lista "Equivalencias" scrollable (max-h-96) a todas las demás unidades, conversión instantánea con useMemo, CopyButton del resultado.
+- date-calculator.tsx (verificado, sin cambios): Tab "Diferencia entre fechas" (defaults hoy y hoy+30) con desglose años/meses/días (algoritmo propio con préstamo de días del mes anterior), total días (differenceInCalendarDays), días hábiles (differenceInBusinessDays), semanas + resto; fechas con format(date, "EEEE, d 'de' MMMM 'de' yyyy", { locale: es }); maneja fechas invertidas (valor absoluto con aviso). Tab "Sumar o restar": ToggleGroup Sumar/Restar, cantidad default 30, Select Días/Semanas/Meses/Años con add/sub de date-fns; resultado con fecha larga + día de semana + diferencia en días desde hoy. Validación con isValid + mensajes ámbar. CopyButton del desglose.
+- invoice-generator.tsx (auditado y corregido para cumplir la spec al pie de la letra): (1) IVA global cambiado de Select con presets a Input number 0-100 (aria-describedby con hint); (2) forma de plantillas en localStorage ajustada a { id, nombre, datos } (era { id, name, savedAt, ... }) con normalización defensiva al cargar (normalizeParty/normalizeLine/normalizeConfig + isValidTemplate); (3) "Nueva factura" ahora resetea directamente + toast.success (antes pedía confirmación); (4) encabezado de la tabla del PDF "Cantidad" (era "Cant."); (5) eliminados cn() triviales e import sobrante.
+- Flujo de plantillas: lectura perezosa useState(readTemplates) al montar (el componente se carga con dynamic ssr:false, así que solo corre en cliente; el intento con useEffect + setState directo fue rechazado por la regla react-hooks/set-state-in-effect), guardado con try/catch + toast.error, sobrescribe por nombre duplicado, Select + Cargar/Eliminar con estados deshabilitados y validaciones con toast.
+- PDF jsPDF: A4 vertical mm monocromático; "FACTURA" + número grandes, emisor (izq) / cliente (der) con splitTextToSize para textos largos, tabla autoTable (Descripción/Cantidad/Precio unit./Impuesto/Importe, overflow linebreak, saltos de página automáticos), totales a la derecha (subtotal, descuento condicional, impuestos, TOTAL destacado), notas con wrap, footer en todas las páginas "Generado con OSK APPS — Herramientas online gratis" + fecha + paginado; doc.save("factura-<numero>.pdf") con sanitización del número. Validación previa: nombre emisor, nombre cliente y ≥1 línea con descripción; faltantes listados en toast.error.
+- Resumen con useMemo y redondeo round2: subtotal por línea, descuento global % sobre subtotal (impuestos escalados proporcionalmente), Intl.NumberFormat("es", { style: "currency", currency }) memoizado por moneda.
+- Calidad: bunx eslint sobre los 3 archivos → 0 errores/0 warnings; tsc --noEmit sin errores en ellos; dev.log sin errores de compilación (GET / 200). UI 100% en español, sin emojis, sin azul/indigo (acentos teal/violet/rose/emerald/amber).
+
+Stage Summary:
+- 3 herramientas cliente completas y operativas: unit-converter (8 categorías, conversión instantánea), date-calculator (2 pestañas con date-fns + locale es) e invoice-generator (módulo con estado del MVP: PDF pro con autoTable, plantillas en localStorage "osk-invoice-templates" como { id, nombre, datos }, monedas COP/USD/EUR/MXN/PEN/ARS, IVA por línea + descuento global).
+- Decisiones: conservé y audité las implementaciones existentes de los intentos cancelados en vez de reescribir (menor riesgo, mismos archivos permitidos); IVA global como Input number y plantillas { id, nombre, datos } estrictamente según spec; plantillas leídas con inicializador perezoso de useState porque la regla react-hooks/set-state-in-effect prohíbe setState síncrono en useEffect (equivalente funcional al montar, ssr:false).
+- Archivos producidos (los 3 únicos permitidos): src/components/tools/unit-converter.tsx, src/components/tools/date-calculator.tsx, src/components/tools/invoice-generator.tsx. Sin dependencias nuevas (jspdf + jspdf-autotable + date-fns ya instaladas), sin secciones SEO/FAQ (las añade el layout), sin tocar page.tsx ni componentes compartidos.
+- Riesgos menores: descuento global reparte proporcionalmente el impuesto por línea (criterio documentado en el PDF como "Total impuestos"); plantillas antiguas con la forma previa (name/savedAt) se descartan silenciosamente por isValidTemplate (no hay datos de usuarios reales aún); crypto.randomUUID tiene fallback para entornos sin soporte.
+---
+Task ID: 3
+Agent: main (orquestador)
+Task: Widget de donación PayPal + SEO pre-deploy + integración final Fase 1
+
+Work Log:
+- Donación: creado src/components/shared/donate-widget.tsx (FAB rose bottom-right + panel flotante con formulario oficial PayPal hosted_button_id NKKNKSZS9PHTE, cierre por Escape/click-fuera/X, target _blank); store con donateOpen; accesos desde header (botón corazón) y footer; Toaster movido a top-center para no chocar con el FAB.
+- SEO punto 1: layout.tsx con metadataBase (NEXT_PUBLIC_SITE_URL con fallback osk-apps.vercel.app), canonical /, robots index/follow, OG/Twitter completos; ToolView aplica metadata dinámica por herramienta (document.title = "<Tool> gratis online | OSK APPS" + meta description) — la app es SPA de ruta única por requisito del sandbox, así que la metadata por tool es client-side.
+- SEO punto 2: src/lib/seo-content.ts (intro + 3 FAQ para las 14 tools), src/components/shared/tool-seo-content.tsx (párrafo + FAQ visible + JSON-LD FAQPage) renderizado bajo la UI de cada tool desde tool-view.tsx SIN tocar los componentes de las tools.
+- SEO punto 3: src/app/sitemap.ts dinámico desde AVAILABLE_TOOLS del registro (home + #/tool/<id> de las 14), verificado con curl: incluye todas.
+- SEO punto 4: src/app/robots.ts (allow all + sitemap); eliminado public/robots.txt estático que causaba conflicto 500 "conflicting public file and page file".
+- SEO punto 5: auditados los IDs de las rutas-hash (merge-pdf, compress-image...); se informan al usuario antes de renombrar (ver reporte).
+- JSON-LD adicional en landing: WebSite + WebApplication con featureList de tools disponibles.
+- Task 2-c completado en 3er intento de agente: unit-converter, date-calculator e invoice-generator (facturas con jsPDF+autotable, plantillas localStorage, IVA/descuento) auditados y corregidos por el agente.
+- README.md completo: stack, arquitectura, Fase 1 ✓, Roadmaps Fases 2/3/4, variables de entorno, deploy Vercel.
+- Lint global 0 errores; dev.log limpio; /sitemap.xml y /robots.txt verificados con curl.
+
+Stage Summary:
+- Fase 1 al 100%: 14 herramientas funcionales + acortador con DB + donaciones PayPal + SEO pre-deploy completo.
+- Limitación conocida documentada: URLs de herramientas son fragmentos hash (#/tool/<id>) por arquitectura SPA del sandbox; migración a rutas reales /tools/... propuesta para post-deploy.
