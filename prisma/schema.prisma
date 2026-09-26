@@ -1,0 +1,34 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================
+// OSK APPS — Acortador de links con analytics
+// ============================================
+
+model ShortLink {
+  id        String   @id @default(cuid())
+  slug      String   @unique
+  url       String
+  title     String?
+  createdAt DateTime @default(now())
+  clicks    Click[]
+}
+
+model Click {
+  id        String    @id @default(cuid())
+  linkId    String
+  link      ShortLink @relation(fields: [linkId], references: [id], onDelete: Cascade)
+  createdAt DateTime  @default(now())
+  referrer  String?
+  device    String? // "mobile" | "tablet" | "desktop" | "bot"
+  browser   String?
+  os        String?
+
+  @@index([linkId, createdAt])
+}
