@@ -55,3 +55,6 @@ server.log
 # base de datos local (regenerar con: bun run db:push)
 db/*.db
 db/*.db-journal
+
+# Resultados temporales de verificación (screenshots/logs de agent-browser)
+tool-results/
