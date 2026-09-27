@@ -31,12 +31,17 @@ export function SiteHeader() {
             variant="outline"
             size="sm"
             asChild
-            className="gap-1.5 border-amber-500/40 bg-amber-500/10 font-bold tracking-wide text-amber-700 hover:bg-amber-500/20 hover:text-amber-800 dark:border-amber-400/30 dark:bg-amber-400/10 dark:text-amber-400 dark:hover:bg-amber-400/20"
+            className="relative gap-1.5 border-amber-500/40 bg-amber-500/10 font-bold tracking-wide text-amber-700 hover:bg-amber-500/20 hover:text-amber-800 dark:border-amber-400/30 dark:bg-amber-400/10 dark:text-amber-400 dark:hover:bg-amber-400/20"
           >
-            <Link href="/pro" aria-label="Suite Profesional">
+            <Link href="/pro" aria-label="Suite Profesional (en desarrollo)">
               <Sparkles className="size-3.5" aria-hidden />
               <span className="hidden sm:inline">PROFESIONAL</span>
               <span className="sm:hidden">PRO</span>
+              <span
+                aria-hidden
+                title="En desarrollo"
+                className="absolute -right-1 -top-1 size-2 rounded-full border-2 border-background bg-amber-500"
+              />
             </Link>
           </Button>
           <Button variant="ghost" size="sm" asChild className="hidden sm:inline-flex">

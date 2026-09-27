@@ -307,3 +307,21 @@ Stage Summary:
 - Autorestart activo (max_restarts 10, delay 3s), logs fluyendo a dev.log con timestamps
 - Comandos utiles: pm2 status | pm2 logs osk-apps | pm2 restart osk-apps | pm2 stop osk-apps | pm2 resurrect
 - Sin cambios en codigo de la app; nuevo archivo ecosystem.config.cjs
+
+---
+Task ID: pro-dev-status
+Agent: Z.ai Code (main)
+Task: Los profesionales dejan en DESARROLLO — ocultar la suite PRO tras un estado "En desarrollo"
+
+Work Log:
+- Contexto: la suite PROFESIONAL (editores de imagen/video/audio con proyectos por dispositivo en IndexedDB) estaba construida y accesible; el usuario pidió dejarla "en desarrollo", así que se retiró del acceso público conservando TODO el código para el lanzamiento futuro.
+- pro-cards.tsx: eliminado el botón "Abrir editor" (y el router); ahora cada card muestra botón deshabilitado "En desarrollo" (icono Hammer, conserva el color de acento con opacidad atenuada de shadcn) + nota "Disponible muy pronto · Gratis y sin registro"; la lista de features quedó bajo el encabezado "Incluirá".
+- /pro (page.tsx): badge "En desarrollo" prominente bajo el título, copy ajustado ("Estamos trabajando en ellos: muy pronto…"), sección renombrada a "Cómo funcionará" (tiempo futuro); metadata actualizada (title con "(en desarrollo)", description "Muy pronto…", OG ajustado; canonical /pro se mantiene).
+- /pro/[type] y /pro/[type]/[projectId]: reemplazadas por redirecciones 307 a /pro (redirect de next/navigation); sin generateMetadata (no sirven contenido). El código de ProjectsView, EditorWorkspace, los 3 editores y lib/pro/local-projects queda intacto sin exponerse.
+- site-header.tsx: botón PROFESIONAL con punto ámbar (size-2, border-background) en la esquina superior derecha + aria-label "Suite Profesional (en desarrollo)" para señalar el estado antes de entrar.
+- Verificación: bun run lint limpio; agent-browser: /pro renderiza con botones deshabilitados, /pro/image, /pro/audio y /pro/video/<id> responden 307 → /pro (confirmado en dev.log), screenshots desktop/móvil 390px/dark OK, footer pegado al fondo, 0 errores de consola.
+- Commit + push a github.com/rafaelg0315g-lab/Osk-apps (rama main).
+
+Stage Summary:
+- La suite PROFESIONAL queda publicada como "En desarrollo": landing /pro informativa con 3 cards deshabilitadas; ninguna ruta de editor accesible (307 a /pro); todo el código de editores y storage local se conserva para activarla cuando el usuario lo decida.
+- Para lanzarla en el futuro: restaurar las páginas [type]/[projectId] desde git (commit anterior), devolver "Abrir editor" en pro-cards y quitar el punto del header.

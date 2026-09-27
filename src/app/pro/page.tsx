@@ -1,18 +1,18 @@
 import type { Metadata } from "next";
-import { Sparkles } from "lucide-react";
+import { Hammer, Sparkles } from "lucide-react";
 
 import { ProCards } from "@/components/pro/pro-cards";
 import { Badge } from "@/components/ui/badge";
 
 export const metadata: Metadata = {
-  title: "Suite Profesional — Editores de imagen, video y audio",
+  title: "Suite Profesional — Editores de imagen, video y audio (en desarrollo)",
   description:
-    "Editores profesionales con proyectos guardados en tu dispositivo: imagen por capas, video con timeline y audio con waveform. Gratis y sin registro en OSK APPS.",
+    "Muy pronto en OSK APPS: editores profesionales de imagen por capas, video con timeline y audio con waveform, con proyectos guardados en tu dispositivo. Gratis y sin registro.",
   alternates: { canonical: "/pro" },
   openGraph: {
-    title: "OSK PROFESIONAL — Editores con proyectos guardados",
+    title: "OSK PROFESIONAL — Muy pronto: editores de imagen, video y audio",
     description:
-      "Imagen por capas, video con timeline y audio con waveform. Sin cuentas: tus proyectos se guardan en tu propio dispositivo.",
+      "Estamos construyendo tres editores profesionales con proyectos guardados en tu dispositivo. Gratis y sin registro.",
     url: "/pro",
     siteName: "OSK APPS",
     type: "website",
@@ -29,16 +29,16 @@ const STEPS = [
   {
     n: "2",
     title: "Trabaja sin registrarte",
-    desc: "Todo corre en tu navegador. Nada se sube a ningún servidor.",
+    desc: "Todo correrá en tu navegador. Nada se sube a ningún servidor.",
   },
   {
     n: "3",
     title: "Retoma cuando quieras",
-    desc: "Autoguardado continuo en este dispositivo: tus proyectos te esperan en “Mis proyectos”.",
+    desc: "Autoguardado continuo en tu dispositivo: tus proyectos te esperarán en “Mis proyectos”.",
   },
 ];
 
-/** Landing de la sección PROFESIONAL (/pro). */
+/** Landing de la sección PROFESIONAL (/pro) — actualmente en desarrollo. */
 export default function ProPage() {
   return (
     <div className="mx-auto w-full max-w-6xl px-4 py-10 sm:px-6 sm:py-14">
@@ -55,16 +55,26 @@ export default function ProPage() {
           de OSK APPS
         </h1>
         <p className="mx-auto mt-4 max-w-xl text-pretty text-muted-foreground">
-          Tres editores avanzados con sistema de proyectos guardables en tu dispositivo: crea,
-          cierra y retoma tu trabajo cuando quieras. Gratis y sin registro.
+          Tres editores avanzados con sistema de proyectos guardables en tu dispositivo. Estamos
+          trabajando en ellos: <strong className="text-foreground">muy pronto</strong> podrás crear,
+          cerrar y retomar tu trabajo cuando quieras. Gratis y sin registro.
         </p>
+        <div className="mt-5 flex justify-center">
+          <Badge
+            variant="outline"
+            className="gap-1.5 rounded-full border-amber-500/40 bg-amber-500/10 px-3.5 py-1.5 text-sm font-semibold text-amber-700 dark:border-amber-400/30 dark:bg-amber-400/10 dark:text-amber-400"
+          >
+            <Hammer className="size-4" aria-hidden />
+            En desarrollo
+          </Badge>
+        </div>
       </div>
 
       <ProCards />
 
       <section className="mt-14" aria-labelledby="pro-how">
         <h2 id="pro-how" className="mb-6 text-center text-lg font-bold tracking-tight">
-          Cómo funciona
+          Cómo funcionará
         </h2>
         <ol className="grid gap-4 sm:grid-cols-3">
           {STEPS.map((step) => (
