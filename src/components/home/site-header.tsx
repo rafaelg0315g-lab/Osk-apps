@@ -4,7 +4,6 @@ import Link from "next/link";
 import { Heart, Layers, Sparkles } from "lucide-react";
 
 import { ThemeToggle } from "@/components/shared/theme-toggle";
-import { UserMenu } from "@/components/pro/user-menu";
 import { Button } from "@/components/ui/button";
 import { useAppStore } from "@/lib/store";
 
@@ -43,7 +42,6 @@ export function SiteHeader() {
           <Button variant="ghost" size="sm" asChild className="hidden sm:inline-flex">
             <Link href="/#catalogo">Herramientas</Link>
           </Button>
-          <UserMenu />
           <Button
             variant="ghost"
             size="sm"

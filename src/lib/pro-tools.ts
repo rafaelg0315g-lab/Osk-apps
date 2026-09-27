@@ -25,13 +25,13 @@ export const PRO_TOOLS: Record<ProToolType, ProToolMeta> = {
   image: {
     type: "image",
     name: "Editor de Imagen",
-    tagline: "Edición por capas con pincel, filtros y texto",
+    tagline: "Edición por capas con pincel, filtros, texto e IA",
     description:
-      "Editor tipo Photoshop: capas, pincel, selecciones, filtros, texto y exportación en múltiples formatos.",
+      "Editor tipo Photoshop: capas, pincel, selecciones, filtros, texto, eliminación de objetos con IA y exportación en múltiples formatos.",
     features: [
-      "Capas y pincel con selección",
-      "Filtros y ajustes por capa",
-      "Eliminador de objetos con IA (próximamente)",
+      "Capas, pincel y selección libre",
+      "Filtros y ajustes de color",
+      "Elimina objetos con IA (inpainting)",
       "Exporta PNG, JPG y WebP",
     ],
     icon: ImagePlus,
@@ -42,14 +42,14 @@ export const PRO_TOOLS: Record<ProToolType, ProToolMeta> = {
   video: {
     type: "video",
     name: "Editor de Video",
-    tagline: "Timeline multipista con cortes y transiciones",
+    tagline: "Timeline multipista con cortes, textos y transiciones",
     description:
-      "Editor de video con timeline: corta, une, agrega transiciones, textos y exporta con ffmpeg.",
+      "Editor de video con timeline: corta, une clips, agrega transiciones, textos y exporta tu video listo para compartir.",
     features: [
-      "Timeline multipista",
+      "Timeline con clips reordenables",
       "Cortes, unión y transiciones",
-      "Textos y efectos sobre el video",
-      "Exporta MP4 / WebM (próximamente)",
+      "Textos y volumen por clip",
+      "Exporta video listo para compartir",
     ],
     icon: Film,
     hrefBase: "/pro/video",
@@ -59,14 +59,14 @@ export const PRO_TOOLS: Record<ProToolType, ProToolMeta> = {
   audio: {
     type: "audio",
     name: "Editor de Audio",
-    tagline: "Waveform, cortes, EQ y efectos de voz",
+    tagline: "Waveform, cortes, EQ, modulador de voz y anti-ruido",
     description:
-      "Editor de audio con waveform: corta, mezcla pistas, ecualiza y aplica efectos de voz.",
+      "Editor de audio con waveform: corta, une y mezcla pistas, ecualiza, aplica efectos de voz y elimina ruido de fondo.",
     features: [
       "Waveform con zoom y selección",
       "Cortar, unir y mezclar pistas",
-      "Ecualizador y modulador de voz",
-      "Eliminación de ruido (próximamente)",
+      "Ecualizador de 8 bandas y presets de voz",
+      "Reducción de ruido integrada",
     ],
     icon: AudioLines,
     hrefBase: "/pro/audio",

@@ -7,12 +7,12 @@ import { Badge } from "@/components/ui/badge";
 export const metadata: Metadata = {
   title: "Suite Profesional — Editores de imagen, video y audio",
   description:
-    "Editores profesionales con proyectos guardados en tu cuenta: imagen por capas, video con timeline y audio con waveform. Incluido gratis en OSK APPS.",
+    "Editores profesionales con proyectos guardados en tu dispositivo: imagen por capas, video con timeline y audio con waveform. Gratis y sin registro en OSK APPS.",
   alternates: { canonical: "/pro" },
   openGraph: {
     title: "OSK PROFESIONAL — Editores con proyectos guardados",
     description:
-      "Imagen por capas, video con timeline y audio con waveform. Crea tu cuenta gratis y retoma tus proyectos cuando quieras.",
+      "Imagen por capas, video con timeline y audio con waveform. Sin cuentas: tus proyectos se guardan en tu propio dispositivo.",
     url: "/pro",
     siteName: "OSK APPS",
     type: "website",
@@ -23,29 +23,23 @@ export const metadata: Metadata = {
 const STEPS = [
   {
     n: "1",
-    title: "Crea tu cuenta gratis",
-    desc: "Solo correo y contraseña. Sin tarjetas ni trámites.",
-  },
-  {
-    n: "2",
     title: "Elige tu editor",
     desc: "Imagen, video o audio — cada uno con proyectos ilimitados.",
   },
   {
+    n: "2",
+    title: "Trabaja sin registrarte",
+    desc: "Todo corre en tu navegador. Nada se sube a ningún servidor.",
+  },
+  {
     n: "3",
     title: "Retoma cuando quieras",
-    desc: "Autoguardado continuo: tus proyectos te esperan en “Mis proyectos”.",
+    desc: "Autoguardado continuo en este dispositivo: tus proyectos te esperan en “Mis proyectos”.",
   },
 ];
 
 /** Landing de la sección PROFESIONAL (/pro). */
-export default async function ProPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ login?: string }>;
-}) {
-  const { login } = await searchParams;
-
+export default function ProPage() {
   return (
     <div className="mx-auto w-full max-w-6xl px-4 py-10 sm:px-6 sm:py-14">
       <div className="mb-10 text-center">
@@ -61,12 +55,12 @@ export default async function ProPage({
           de OSK APPS
         </h1>
         <p className="mx-auto mt-4 max-w-xl text-pretty text-muted-foreground">
-          Tres editores avanzados con sistema de proyectos guardables: crea, cierra y retoma tu
-          trabajo desde cualquier dispositivo. Incluido gratis durante el lanzamiento.
+          Tres editores avanzados con sistema de proyectos guardables en tu dispositivo: crea,
+          cierra y retoma tu trabajo cuando quieras. Gratis y sin registro.
         </p>
       </div>
 
-      <ProCards openLogin={login === "1"} />
+      <ProCards />
 
       <section className="mt-14" aria-labelledby="pro-how">
         <h2 id="pro-how" className="mb-6 text-center text-lg font-bold tracking-tight">

@@ -179,7 +179,7 @@ export const TOOLS: ToolMeta[] = [
     description: "Reduce el peso de tus PDF manteniendo la mejor calidad posible.",
     category: "pdf",
     icon: FileDown,
-    status: "soon",
+    status: "available",
     keywords: ["reducir", "peso", "tamaño", "optimizar"],
   },
   {
@@ -189,7 +189,7 @@ export const TOOLS: ToolMeta[] = [
     description: "Convierte tus PDF a documentos Word (.docx) editables.",
     category: "pdf",
     icon: FileText,
-    status: "soon",
+    status: "available",
     keywords: ["word", "docx", "convertir", "office"],
   },
   {
@@ -199,7 +199,7 @@ export const TOOLS: ToolMeta[] = [
     description: "Extrae tablas de un PDF y conviértelas a hojas de cálculo.",
     category: "pdf",
     icon: Table,
-    status: "soon",
+    status: "available",
     keywords: ["excel", "xlsx", "hoja de cálculo", "tablas"],
   },
   {
@@ -209,7 +209,7 @@ export const TOOLS: ToolMeta[] = [
     description: "Transforma tus PDF en presentaciones PowerPoint editables.",
     category: "pdf",
     icon: Presentation,
-    status: "soon",
+    status: "available",
     keywords: ["powerpoint", "pptx", "presentación", "diapositivas"],
   },
   {
@@ -219,7 +219,7 @@ export const TOOLS: ToolMeta[] = [
     description: "Convierte cada página del PDF en una imagen JPG.",
     category: "pdf",
     icon: FileImage,
-    status: "soon",
+    status: "available",
     keywords: ["jpg", "jpeg", "png", "imagen", "convertir"],
   },
   {
@@ -229,7 +229,7 @@ export const TOOLS: ToolMeta[] = [
     description: "Convierte tus imágenes en un documento PDF.",
     category: "pdf",
     icon: Images,
-    status: "soon",
+    status: "available",
     keywords: ["jpg", "png", "imagen a pdf", "convertir"],
   },
   {
@@ -239,7 +239,7 @@ export const TOOLS: ToolMeta[] = [
     description: "Gira las páginas de tu PDF en el ángulo que necesites.",
     category: "pdf",
     icon: RotateCw,
-    status: "soon",
+    status: "available",
     keywords: ["girar", "rotar", "orientación"],
   },
   {
@@ -249,7 +249,7 @@ export const TOOLS: ToolMeta[] = [
     description: "Borra las páginas que no necesitas de tu documento.",
     category: "pdf",
     icon: FileX,
-    status: "soon",
+    status: "available",
     keywords: ["borrar", "quitar", "eliminar"],
   },
   {
@@ -259,7 +259,7 @@ export const TOOLS: ToolMeta[] = [
     description: "Agrega contraseña a tus PDF para mayor seguridad.",
     category: "pdf",
     icon: Lock,
-    status: "soon",
+    status: "available",
     keywords: ["contraseña", "cifrar", "seguridad", "encriptar"],
   },
   {
@@ -269,7 +269,7 @@ export const TOOLS: ToolMeta[] = [
     description: "Quita la contraseña de PDFs que te pertenecen.",
     category: "pdf",
     icon: LockOpen,
-    status: "soon",
+    status: "available",
     keywords: ["quitar contraseña", "descifrar", "liberar"],
   },
   {
@@ -279,7 +279,7 @@ export const TOOLS: ToolMeta[] = [
     description: "Agrega tu firma digital a documentos PDF.",
     category: "pdf",
     icon: PenLineIcon,
-    status: "soon",
+    status: "available",
     keywords: ["firma", "rubrica", "digital", "contrato"],
   },
   {
@@ -289,7 +289,7 @@ export const TOOLS: ToolMeta[] = [
     description: "Agrega números de página con la posición y formato que prefieras.",
     category: "pdf",
     icon: ListOrdered,
-    status: "soon",
+    status: "available",
     keywords: ["numerar", "números", "paginar"],
   },
   {
@@ -299,7 +299,7 @@ export const TOOLS: ToolMeta[] = [
     description: "Agrega texto o marca de agua a tus documentos.",
     category: "pdf",
     icon: Droplets,
-    status: "soon",
+    status: "available",
     keywords: ["watermark", "marca", "texto", "confidencial"],
   },
   {
@@ -309,7 +309,7 @@ export const TOOLS: ToolMeta[] = [
     description: "Extrae texto de PDFs escaneados con reconocimiento óptico.",
     category: "pdf",
     icon: ScanText,
-    status: "soon",
+    status: "available",
     keywords: ["ocr", "escaneado", "texto", "reconocimiento"],
   },
 
@@ -341,7 +341,7 @@ export const TOOLS: ToolMeta[] = [
     description: "Cambia el ancho y alto de tus imágenes manteniendo la proporción.",
     category: "imagen",
     icon: Maximize2,
-    status: "soon",
+    status: "available",
     keywords: ["tamaño", "escalar", "resize", "dimensiones"],
   },
   {
@@ -351,7 +351,7 @@ export const TOOLS: ToolMeta[] = [
     description: "Corta y ajusta tus imágenes al área exacta que necesitas.",
     category: "imagen",
     icon: Crop,
-    status: "soon",
+    status: "available",
     keywords: ["cortar", "crop", "ajustar"],
   },
   {
@@ -361,7 +361,7 @@ export const TOOLS: ToolMeta[] = [
     description: "Elimina el fondo de tus imágenes automáticamente con IA.",
     category: "imagen",
     icon: Eraser,
-    status: "soon",
+    status: "available",
     keywords: ["fondo", "transparente", "ia", "background"],
   },
   {
@@ -371,7 +371,7 @@ export const TOOLS: ToolMeta[] = [
     description: "Protege tus imágenes agregando texto o logotipos.",
     category: "imagen",
     icon: Droplets,
-    status: "soon",
+    status: "available",
     keywords: ["watermark", "logo", "proteger"],
   },
   {
@@ -381,7 +381,7 @@ export const TOOLS: ToolMeta[] = [
     description: "Combina varias imágenes en un collage con distintas plantillas.",
     category: "imagen",
     icon: LayoutGrid,
-    status: "soon",
+    status: "available",
     keywords: ["collage", "combinar", "mosaico", "plantillas"],
   },
   {
@@ -391,7 +391,7 @@ export const TOOLS: ToolMeta[] = [
     description: "Mejora la resolución de tus imágenes hasta 4x con IA.",
     category: "imagen",
     icon: Sparkles,
-    status: "soon",
+    status: "available",
     keywords: ["mejorar", "resolución", "hd", "4k", "ia"],
   },
   {
@@ -401,7 +401,7 @@ export const TOOLS: ToolMeta[] = [
     description: "Ajusta brillo, contraste, saturación y aplica filtros.",
     category: "imagen",
     icon: SlidersHorizontal,
-    status: "soon",
+    status: "available",
     keywords: ["filtros", "brillo", "contraste", "editar"],
   },
 
@@ -413,7 +413,7 @@ export const TOOLS: ToolMeta[] = [
     description: "Cambia el formato de tus videos: MP4, WebM, MOV y más.",
     category: "video",
     icon: Clapperboard,
-    status: "soon",
+    status: "available",
     keywords: ["mp4", "webm", "mov", "formato", "convertir"],
   },
   {
@@ -423,7 +423,7 @@ export const TOOLS: ToolMeta[] = [
     description: "Reduce el tamaño de tus videos manteniendo la calidad.",
     category: "video",
     icon: Minimize2,
-    status: "soon",
+    status: "available",
     keywords: ["reducir", "peso", "optimizar"],
   },
   {
@@ -433,7 +433,7 @@ export const TOOLS: ToolMeta[] = [
     description: "Convierte MP4 a MP3: saca el audio de cualquier video.",
     category: "video",
     icon: Music,
-    status: "soon",
+    status: "available",
     keywords: ["mp3", "audio", "mp4", "extraer", "sonido"],
   },
   {
@@ -443,7 +443,7 @@ export const TOOLS: ToolMeta[] = [
     description: "Recorta tus videos y quédate solo con el fragmento que quieres.",
     category: "video",
     icon: Scissors,
-    status: "soon",
+    status: "available",
     keywords: ["recortar", "trim", "editar", "fragmento"],
   },
   {
@@ -453,7 +453,7 @@ export const TOOLS: ToolMeta[] = [
     description: "Convierte entre MP3, WAV, OGG, AAC y otros formatos.",
     category: "video",
     icon: AudioLines,
-    status: "soon",
+    status: "available",
     keywords: ["mp3", "wav", "ogg", "aac", "convertir"],
   },
   {
@@ -463,7 +463,7 @@ export const TOOLS: ToolMeta[] = [
     description: "Combina varios clips en un solo video continuo.",
     category: "video",
     icon: Combine,
-    status: "soon",
+    status: "available",
     keywords: ["unir", "combinar", "juntar", "merge"],
   },
   {
@@ -473,7 +473,7 @@ export const TOOLS: ToolMeta[] = [
     description: "Genera GIF animados desde fragmentos de tus videos.",
     category: "video",
     icon: Film,
-    status: "soon",
+    status: "available",
     keywords: ["gif", "animado", "meme"],
   },
 
@@ -505,7 +505,7 @@ export const TOOLS: ToolMeta[] = [
     description: "Revisa y corrige la ortografía de tus textos en español.",
     category: "texto",
     icon: SpellCheck,
-    status: "soon",
+    status: "available",
     keywords: ["ortografía", "corregir", "tildes", "español"],
   },
   {
@@ -515,7 +515,7 @@ export const TOOLS: ToolMeta[] = [
     description: "Crea contratos simples con plantillas personalizables.",
     category: "texto",
     icon: ScrollText,
-    status: "soon",
+    status: "available",
     keywords: ["contrato", "legal", "plantilla", "acuerdo"],
   },
   {
@@ -525,7 +525,7 @@ export const TOOLS: ToolMeta[] = [
     description: "Convierte tus documentos Markdown a PDF o Word con formato.",
     category: "texto",
     icon: FileCode,
-    status: "soon",
+    status: "available",
     keywords: ["markdown", "md", "pdf", "word", "convertir"],
   },
   {
@@ -535,7 +535,7 @@ export const TOOLS: ToolMeta[] = [
     description: "Crea tu currículum con plantillas profesionales y editor visual.",
     category: "texto",
     icon: User,
-    status: "soon",
+    status: "available",
     keywords: ["cv", "currículum", "hoja de vida", "trabajo", "resume"],
   },
 
@@ -607,7 +607,7 @@ export const TOOLS: ToolMeta[] = [
     description: "Compara dos textos y visualiza las diferencias línea por línea.",
     category: "dev",
     icon: GitCompareIcon,
-    status: "soon",
+    status: "available",
     keywords: ["diff", "comparar", "diferencias", "cambios"],
   },
 
@@ -639,7 +639,7 @@ export const TOOLS: ToolMeta[] = [
     description: "Calcula IVA, impuestos y totales con las tasas de tu país.",
     category: "calculadoras",
     icon: Percent,
-    status: "soon",
+    status: "available",
     keywords: ["iva", "impuestos", "total", "subtotal"],
   },
   {
@@ -649,7 +649,7 @@ export const TOOLS: ToolMeta[] = [
     description: "Convierte entre monedas con tasas de cambio actualizadas.",
     category: "calculadoras",
     icon: Coins,
-    status: "soon",
+    status: "available",
     keywords: ["divisas", "monedas", "dólar", "euro", "cambio"],
   },
 
@@ -661,7 +661,7 @@ export const TOOLS: ToolMeta[] = [
     description: "Resume textos y PDF largos en segundos con IA.",
     category: "ia",
     icon: TextQuote,
-    status: "soon",
+    status: "available",
     keywords: ["resumen", "resumir", "ia", "pdf", "texto"],
   },
   {
@@ -671,7 +671,7 @@ export const TOOLS: ToolMeta[] = [
     description: "Traduce documentos completos manteniendo el formato.",
     category: "ia",
     icon: Languages,
-    status: "soon",
+    status: "available",
     keywords: ["traducir", "idiomas", "inglés", "español", "ia"],
   },
   {
@@ -681,7 +681,7 @@ export const TOOLS: ToolMeta[] = [
     description: "Genera un chatbot de preguntas frecuentes entrenado con tu negocio.",
     category: "ia",
     icon: MessagesSquare,
-    status: "soon",
+    status: "available",
     keywords: ["chatbot", "faq", "negocio", "soporte", "ia"],
   },
   {
@@ -691,7 +691,7 @@ export const TOOLS: ToolMeta[] = [
     description: "Crea descripciones de producto persuasivas con IA.",
     category: "ia",
     icon: Package,
-    status: "soon",
+    status: "available",
     keywords: ["producto", "descripción", "ecommerce", "ventas", "ia"],
   },
 ];

@@ -2,43 +2,23 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useSession } from "next-auth/react";
 import { ArrowRight, Check } from "lucide-react";
-import { toast } from "sonner";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
-import { PRO_TOOL_LIST, PRO_TOOLS } from "@/lib/pro-tools";
-import { useAppStore } from "@/lib/store";
+import { PRO_TOOL_LIST, PRO_TOOLS, type ProToolType } from "@/lib/pro-tools";
 import { cn } from "@/lib/utils";
 
 /**
  * Cards grandes de la landing /pro: Editor de Imagen, Video y Audio.
- * Si el usuario no tiene sesión, abre el diálogo de autenticación.
+ * Sin cuentas: los proyectos se guardan en el dispositivo del usuario.
  */
-export function ProCards({ openLogin }: { openLogin: boolean }) {
-  const { status } = useSession();
-  const setAuthOpen = useAppStore((s) => s.setAuthOpen);
+export function ProCards() {
   const router = useRouter();
 
-  // Si llegamos desde /pro?login=1 (guard de las páginas privadas), abrimos el diálogo
-  useEffect(() => {
-    if (openLogin && status === "unauthenticated") {
-      setAuthOpen(true);
-    }
-  }, [openLogin, status, setAuthOpen]);
-
-  function openEditor(type: keyof typeof PRO_TOOLS) {
-    const tool = PRO_TOOLS[type];
-    if (status === "authenticated") {
-      router.push(tool.hrefBase);
-    } else {
-      setAuthOpen(true);
-      toast.info("Inicia sesión o crea tu cuenta gratis", {
-        description: "Los proyectos se guardan en tu cuenta para retomarlos más tarde.",
-      });
-    }
+  function openEditor(type: ProToolType) {
+    router.push(PRO_TOOLS[type].hrefBase);
   }
 
   return (
@@ -88,7 +68,7 @@ export function ProCards({ openLogin }: { openLogin: boolean }) {
                 <ArrowRight className="size-4" aria-hidden />
               </Button>
               <p className="text-center text-xs text-muted-foreground">
-                Requiere cuenta gratuita · Proyectos guardados
+                Gratis y sin registro · Guardado en tu dispositivo
               </p>
             </CardFooter>
           </Card>

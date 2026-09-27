@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, CalendarClock, FolderOpen, Loader2, Plus, Trash2 } from "lucide-react";
+import { ArrowLeft, CalendarClock, FolderOpen, HardDrive, Loader2, Plus, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import {
@@ -18,55 +18,70 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { apiJson, type ProProjectDTO } from "@/lib/pro-client";
+import {
+  createLocalProject,
+  deleteLocalProject,
+  listLocalProjects,
+  type LocalProject,
+} from "@/lib/pro/local-projects";
 import { PRO_TOOLS, type ProToolType } from "@/lib/pro-tools";
 import { cn, formatDate } from "@/lib/utils";
 
 /**
  * Vista "Mis proyectos" de un editor PRO: lista con miniatura, fecha,
  * botones Abrir/Eliminar y creación de proyectos nuevos.
+ * Los proyectos se guardan en el dispositivo (IndexedDB), sin cuentas.
  */
-export function ProjectsView({
-  type,
-  initialProjects,
-}: {
-  type: ProToolType;
-  initialProjects: ProProjectDTO[];
-}) {
+export function ProjectsView({ type }: { type: ProToolType }) {
   const tool = PRO_TOOLS[type];
   const Icon = tool.icon;
   const router = useRouter();
 
-  const [projects, setProjects] = useState(initialProjects);
+  const [projects, setProjects] = useState<LocalProject[] | null>(null);
   const [creating, setCreating] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
 
+  useEffect(() => {
+    let active = true;
+    listLocalProjects(type)
+      .then((list) => {
+        if (active) setProjects(list);
+      })
+      .catch(() => {
+        if (active) {
+          toast.error("No pudimos leer los proyectos guardados en este dispositivo.");
+          setProjects([]);
+        }
+      });
+    return () => {
+      active = false;
+    };
+  }, [type]);
+
   async function createProject() {
     if (creating) return;
     setCreating(true);
-    const res = await apiJson<{ project: ProProjectDTO }>("/api/projects", {
-      method: "POST",
-      body: JSON.stringify({ type, name: "Proyecto sin título" }),
-    });
-    if (res.ok && res.data?.project) {
-      router.push(`${tool.hrefBase}/${res.data.project.id}`);
-    } else {
-      toast.error(res.error ?? "No pudimos crear el proyecto.");
+    try {
+      const project = await createLocalProject(type, "Proyecto sin título");
+      router.push(`${tool.hrefBase}/${project.id}`);
+    } catch {
+      toast.error("No pudimos crear el proyecto en este dispositivo.");
       setCreating(false);
     }
   }
 
   async function deleteProject(id: string) {
     setPendingDeleteId(id);
-    const res = await apiJson(`/api/projects/${id}`, { method: "DELETE" });
-    setPendingDeleteId(null);
-    setDeletingId(null);
-    if (res.ok) {
-      setProjects((ps) => ps.filter((p) => p.id !== id));
+    try {
+      await deleteLocalProject(id);
+      setProjects((ps) => (ps ? ps.filter((p) => p.id !== id) : ps));
       toast.success("Proyecto eliminado");
-    } else {
-      toast.error(res.error ?? "No pudimos eliminar el proyecto.");
+    } catch {
+      toast.error("No pudimos eliminar el proyecto.");
+    } finally {
+      setPendingDeleteId(null);
+      setDeletingId(null);
     }
   }
 
@@ -90,7 +105,7 @@ export function ProjectsView({
           <div>
             <h1 className="text-xl font-bold tracking-tight sm:text-2xl">{tool.name}</h1>
             <p className="text-sm text-muted-foreground">
-              Tus proyectos se guardan automáticamente en tu cuenta.
+              Tus proyectos se guardan automáticamente en este dispositivo.
             </p>
           </div>
         </div>
@@ -104,7 +119,12 @@ export function ProjectsView({
         </Button>
       </div>
 
-      {projects.length === 0 ? (
+      {projects === null ? (
+        <div className="flex items-center justify-center gap-3 rounded-xl border border-dashed py-20 text-sm text-muted-foreground">
+          <Loader2 className="size-5 animate-spin" aria-hidden />
+          Cargando proyectos…
+        </div>
+      ) : projects.length === 0 ? (
         <div className="flex flex-col items-center gap-4 rounded-xl border border-dashed py-20 text-center">
           <span
             className={cn("flex size-14 items-center justify-center rounded-2xl", tool.chipClass)}
@@ -114,7 +134,8 @@ export function ProjectsView({
           <div>
             <p className="font-semibold">Aún no tienes proyectos</p>
             <p className="mx-auto mt-1 max-w-sm text-sm text-muted-foreground">
-              Crea tu primer proyecto de {tool.name.toLowerCase()} y retómalo cuando quieras.
+              Crea tu primer proyecto de {tool.name.toLowerCase()} y retómalo cuando quieras. Se
+              guarda en este navegador, sin cuentas ni registros.
             </p>
           </div>
           <Button onClick={createProject} disabled={creating} className={cn("gap-2", tool.buttonClass)}>
@@ -148,7 +169,7 @@ export function ProjectsView({
                   <p className="truncate font-semibold">{project.name}</p>
                   <p className="mt-0.5 flex items-center gap-1.5 text-xs text-muted-foreground">
                     <CalendarClock className="size-3.5" aria-hidden />
-                    Editado {formatDate(project.updatedAt)}
+                    Editado {formatDate(new Date(project.updatedAt))}
                   </p>
                 </div>
 
@@ -176,13 +197,21 @@ export function ProjectsView({
         </ul>
       )}
 
+      <div className="mt-6 flex items-center justify-center gap-1.5 text-xs text-muted-foreground">
+        <HardDrive className="size-3.5" aria-hidden />
+        Guardado local en este navegador
+        {projects && projects.length > 0
+          ? ` · ${projects.length} ${projects.length === 1 ? "proyecto" : "proyectos"}`
+          : ""}
+      </div>
+
       <AlertDialog open={deletingId !== null} onOpenChange={(o) => !o && setDeletingId(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>¿Eliminar este proyecto?</AlertDialogTitle>
             <AlertDialogDescription>
-              Se eliminará &quot;{projects.find((p) => p.id === deletingId)?.name}&quot; y todo su
-              contenido. Esta acción no se puede deshacer.
+              Se eliminará &quot;{projects?.find((p) => p.id === deletingId)?.name}&quot; y todo su
+              contenido de este dispositivo. Esta acción no se puede deshacer.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
