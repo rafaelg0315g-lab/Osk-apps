@@ -287,3 +287,23 @@ Stage Summary:
 - 7 herramientas PDF 100% cliente operativas: conversión a Word (.docx OOXML real con JSZip), a Excel (CSV con BOM y clustering de columnas + vista previa), a PowerPoint (pptxgenjs 16:9 página completa), proteger con contraseña y permisos (pdf-lib-plus-encrypt AES según versión del PDF), desbloquear (pdfjs descifra + reconstrucción raster honesta), firmar con pad de firma configurable y OCR español+inglés con progreso real.
 - Decisiones clave: unlock usa pdfjs para descifrar porque pdf-lib-plus-encrypt solo cifra (load no acepta password); detección de "ya cifrado" por mensaje de error (name del EncryptedPDFError llega como "Error"); ownerPassword = userPassword en proteger.
 - Archivos producidos (los 7 únicos permitidos): src/components/tools/pdf-to-word.tsx, pdf-to-excel.tsx, pdf-to-ppt.tsx, protect-pdf.tsx, unlock-pdf.tsx, sign-pdf.tsx, ocr-pdf.tsx.
+
+---
+Task ID: pm2-setup
+Agent: Z.ai Code (main)
+Task: Activar PM2 como gestor de procesos del dev server de OSK APPS
+
+Work Log:
+- Verificado entorno: PM2 no instalado, puerto 3000 libre, Node v24.21.0 + bun disponibles
+- Instalado PM2 globalmente via npm install -g pm2
+- Creado /home/z/my-project/ecosystem.config.cjs: ejecuta el binario de Next.js directamente (node_modules/next/dist/bin/next dev -p 3000) evitando el pipe con tee de npm run dev (incompatible con PM2)
+- Configurado PM2 para escribir out_file/error_file en /home/z/my-project/dev.log (mantiene compatibilidad con el diagnostico del proyecto)
+- Arrancada la app: pm2 start ecosystem.config.cjs -> proceso "osk-apps" online (pid 13037)
+- Ejecutado pm2 save (dump persistido en /home/z/.pm2/dump.pm2)
+- pm2 startup systemd requiere sudo (no disponible en sandbox) -> daemon persiste en la sesion; recuperable con pm2 resurrect
+
+Stage Summary:
+- Servidor Next.js 16.1.3 gestionado por PM2, Ready in 719ms, HTTP 200 verificado en http://localhost:3000/ y /pro/video
+- Autorestart activo (max_restarts 10, delay 3s), logs fluyendo a dev.log con timestamps
+- Comandos utiles: pm2 status | pm2 logs osk-apps | pm2 restart osk-apps | pm2 stop osk-apps | pm2 resurrect
+- Sin cambios en codigo de la app; nuevo archivo ecosystem.config.cjs
