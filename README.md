@@ -25,6 +25,7 @@ Gratis, rápido, sin registro y 100 % en español.
 - **Buscador integrado** por nombre, descripción y palabras clave.
 - **Diseño responsive** mobile-first.
 - **Widget flotante de donación PayPal** integrado en toda la app.
+- **OSK PROFESIONAL** — suite de editores avanzados (imagen, video, audio) con cuenta de usuario y proyectos guardables con autoguardado.
 
 ## 🧰 Catálogo de herramientas
 
@@ -62,6 +63,18 @@ El catálogo completo está definido en un único registro (`src/lib/tools-regis
 
 Los slugs en español de cada URL se definen en el campo `slug` de `src/lib/tools-registry.ts`.
 
+## 🧑‍🎨 OSK PROFESIONAL
+
+Sección premium (gratis durante el lanzamiento) con **editores avanzados y sistema de proyectos guardables**:
+
+- **Landing en `/pro`** con tres editores: **Editor de Imagen** (`/pro/image`), **Editor de Video** (`/pro/video`) y **Editor de Audio** (`/pro/audio`).
+- **Login ligero con NextAuth v4** (credenciales correo + contraseña, hash bcrypt, sesiones JWT). Cada editor exige sesión: las vistas privadas redirigen a `/pro?login=1`.
+- **Proyectos guardables**: cada proyecto tiene un **ID único (UUID)**, URL propia (`/pro/image/[projectId]`, etc.), nombre editable y **autoguardado** (debounce + al salir del editor) vía `PATCH /api/projects/[id]`.
+- Vista **«Mis proyectos»** por editor: lista con miniatura, fecha de última edición, botones **Abrir**/**Eliminar** y botón **Nuevo proyecto**.
+- API protegida con ownership: `/api/projects` (GET/POST) y `/api/projects/[id]` (GET/PATCH/DELETE) — un proyecto ajeno responde `404`.
+- Modelo de datos en Prisma: `User` y `Project` (el estado del proyecto se guarda serializado en `data`, ya que SQLite no soporta el tipo `Json` de Prisma; al migrar a PostgreSQL se puede cambiar a `Json`).
+- 🗺️ Siguiente fase: lienzo del editor de imagen (capas/pincel con Konva), inpainting con IA y el patrón de «IA controla operaciones ya construidas» para los tres editores.
+
 ## 🚀 Puesta en marcha local
 
 **Requisitos:** Node.js 20+ o [Bun](https://bun.sh).
@@ -78,7 +91,11 @@ bun install        # o: npm install
 bun run db:push    # crea/regenera db/custom.db desde prisma/schema.prisma
                    # (requiere DATABASE_URL en .env, p. ej. "file:./db/custom.db")
 
-# 4. Arrancar el servidor de desarrollo
+# 4. Variables de sesión para OSK PROFESIONAL (.env)
+#    NEXTAUTH_SECRET=<openssl rand -base64 32>
+#    NEXTAUTH_URL=http://localhost:3000
+
+# 5. Arrancar el servidor de desarrollo
 bun run dev        # → http://localhost:3000
 ```
 
@@ -112,7 +129,7 @@ Otros scripts útiles:
 
 1. Haz **push del repositorio a GitHub**.
 2. **Importa el repo en Vercel** (*Add New → Project*); el framework **Next.js se detecta automáticamente**.
-3. Configura la variable de entorno **`NEXT_PUBLIC_SITE_URL`** con el dominio asignado (p. ej. `https://osk-apps.vercel.app`).
+3. Configura las variables de entorno: **`NEXT_PUBLIC_SITE_URL`** con el dominio asignado (p. ej. `https://osk-apps.vercel.app`) y, para OSK PROFESIONAL, **`NEXTAUTH_SECRET`** (cadena aleatoria) y **`NEXTAUTH_URL`** con la URL pública.
 4. **Deploy.** 🎉
 
 > ⚠️ **Importante en producción:** el filesystem de las funciones serverless es efímero, por lo que **SQLite solo sirve para desarrollo local**. En producción conviene usar **PostgreSQL**.
