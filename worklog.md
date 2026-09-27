@@ -191,3 +191,23 @@ Work Log:
 Stage Summary:
 - SEO prompt 100% implementado: metadata por página ✓, contenido+FAQ sin tocar UI de tools ✓, sitemap dinámico completo (54 URLs) ✓, robots ✓, rutas descriptivas en español ✓
 - Push checkpoint (pre-SEO) y push final a github.com/rafaelg0315g-lab/Osk-apps rama main
+
+---
+Task ID: 4
+Agent: orchestrator (Z.ai Code)
+Task: Sección PROFESIONAL — punto 0: estructura, login ligero NextAuth, modelo User/Project y sistema de proyectos (esqueleto sin editores)
+
+Work Log:
+- Confirmado el patrón "IA controla operaciones ya construidas" (JSON de operaciones; único generativo: inpainting) y el orden de construcción acordado
+- Agregados modelos User + Project a prisma/schema.prisma (data como String: SQLite no soporta Json de Prisma) y aplicado con db:push
+- Instalado bcryptjs (next-auth v4 ya estaba en el proyecto); .env con NEXTAUTH_SECRET y NEXTAUTH_URL
+- Login ligero: lib/auth.ts (Credentials + JWT + bcrypt), /api/auth/[...nextauth], /api/auth/register, types/next-auth.d.ts
+- APIs de proyectos: /api/projects (GET lista con ?type, POST crea) y /api/projects/[id] (GET/PATCH/DELETE) con sesión obligatoria y ownership (proyecto ajeno → 404); límites de tamaño en data/thumbnail
+- UI: AuthDialog global (login/registro con pestañas), UserMenu en header (avatar + Mis proyectos + Cerrar sesión), nav "PROFESIONAL" con acento ámbar
+- Rutas: /pro (landing 3 cards + cómo funciona), /pro/[type] (Mis proyectos, guard de sesión → /pro?login=1), /pro/[type]/[projectId] (esqueleto del editor con nombre editable y autoguardado)
+- Componentes: providers.tsx (SessionProvider), pro-cards, projects-view (crear/eliminar con AlertDialog), editor-shell (debounce 700ms + blur, indicador Guardando/Guardado)
+- README actualizado (sección OSK PROFESIONAL + env vars)
+
+Stage Summary:
+- E2E verificado con agent-browser: registro auto-login, guard 307 anónimo, crear proyecto (UUID), renombrar con autoguardado persistido en DB, listar, eliminar con confirmación, menú usuario, 404 tipo inválido, 401 APIs sin sesión, lint limpio, sin errores en dev.log
+- Listo para Fase 1 del prompt PRO: editor de imagen (Konva) sobre este esqueleto

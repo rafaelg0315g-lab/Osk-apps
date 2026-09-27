@@ -3,6 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 
 import { Toaster } from "@/components/ui/sonner";
+import { Providers } from "@/components/providers";
+import { AuthDialog } from "@/components/pro/auth-dialog";
 import { SiteFooter } from "@/components/home/site-footer";
 import { SiteHeader } from "@/components/home/site-header";
 import { DonateWidget } from "@/components/shared/donate-widget";
@@ -92,13 +94,16 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <div className="flex min-h-screen flex-col">
-            <SiteHeader />
-            <main className="flex-1">{children}</main>
-            <SiteFooter />
-            <DonateWidget />
-          </div>
-          <Toaster position="top-center" richColors />
+          <Providers>
+            <div className="flex min-h-screen flex-col">
+              <SiteHeader />
+              <main className="flex-1">{children}</main>
+              <SiteFooter />
+              <DonateWidget />
+              <AuthDialog />
+            </div>
+            <Toaster position="top-center" richColors />
+          </Providers>
         </ThemeProvider>
       </body>
     </html>

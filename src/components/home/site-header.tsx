@@ -1,9 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { Heart, Layers } from "lucide-react";
+import { Heart, Layers, Sparkles } from "lucide-react";
 
 import { ThemeToggle } from "@/components/shared/theme-toggle";
+import { UserMenu } from "@/components/pro/user-menu";
 import { Button } from "@/components/ui/button";
 import { useAppStore } from "@/lib/store";
 
@@ -27,9 +28,22 @@ export function SiteHeader() {
         </Link>
 
         <nav className="flex items-center gap-1 sm:gap-2" aria-label="Navegación principal">
+          <Button
+            variant="outline"
+            size="sm"
+            asChild
+            className="gap-1.5 border-amber-500/40 bg-amber-500/10 font-bold tracking-wide text-amber-700 hover:bg-amber-500/20 hover:text-amber-800 dark:border-amber-400/30 dark:bg-amber-400/10 dark:text-amber-400 dark:hover:bg-amber-400/20"
+          >
+            <Link href="/pro" aria-label="Suite Profesional">
+              <Sparkles className="size-3.5" aria-hidden />
+              <span className="hidden sm:inline">PROFESIONAL</span>
+              <span className="sm:hidden">PRO</span>
+            </Link>
+          </Button>
           <Button variant="ghost" size="sm" asChild className="hidden sm:inline-flex">
             <Link href="/#catalogo">Herramientas</Link>
           </Button>
+          <UserMenu />
           <Button
             variant="ghost"
             size="sm"

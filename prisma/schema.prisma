@@ -32,3 +32,34 @@ model Click {
 
   @@index([linkId, createdAt])
 }
+
+// ============================================
+// OSK APPS PROFESIONAL — usuarios y proyectos
+// ============================================
+
+model User {
+  id        String    @id @default(uuid())
+  email     String    @unique
+  name      String?
+  password  String // hash bcrypt (login con credenciales)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  projects  Project[]
+}
+
+model Project {
+  id        String   @id @default(uuid())
+  userId    String
+  type      String // "image" | "video" | "audio"
+  name      String
+  /// Estado serializable del proyecto (capas, timeline, etc.).
+  /// Nota: SQLite no soporta el tipo Json de Prisma, se guarda JSON en string.
+  data      String?
+  /// Miniatura de preview (URL o base64)
+  thumbnail String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, type, updatedAt])
+}
